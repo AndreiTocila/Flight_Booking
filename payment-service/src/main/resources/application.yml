@@ -1,0 +1,11 @@
+paypal:
+  client-id: AS3bJBbQWlloR5ukRznactmyKC26Oxck8YZGb3In0R6cyh8gWbqHiS3cG38sfmmqw1GqLdwhMdFVvKyo
+  client-secret: EBtnoxyjXRjApWEUHFzR5kRyTvatTCu6IOB0XY3RlJeRqhD_9Oh905EnOtHW8ZtQl0sB3srnxa9speFF
+  mode: sandbox
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: paypal
