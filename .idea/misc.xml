@@ -6,6 +6,8 @@
       <list>
         <option value="$PROJECT_DIR$/user-service/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$USER_HOME$/Desktop/flight-search/pom.xml" />
+        <option value="$PROJECT_DIR$/flight-search-service/pom.xml" />
       </list>
     </option>
   </component>
