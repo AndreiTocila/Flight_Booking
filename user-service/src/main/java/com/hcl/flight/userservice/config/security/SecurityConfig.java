@@ -1,21 +1,28 @@
 package com.hcl.flight.userservice.config.security;
 
+import org.keycloak.adapters.KeycloakConfigResolver;
+import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
-public class SecurityConfig {
-
-  public static final String ADMIN = "admin";
-  public static final String USER = "user";
+@KeycloakConfiguration
+public class SecurityConfig{
   private final JwtConverter jwtConverter;
 
   public SecurityConfig(JwtConverter jwtConverter) {
@@ -24,15 +31,6 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(
-        (authz) ->
-            authz
-//                .requestMatchers(HttpMethod.GET, "/operator/**")
-//                .hasRole(ADMIN)
-                .requestMatchers(HttpMethod.GET, "/userservice/user/**")
-                .hasRole(ADMIN)
-                .anyRequest()
-                .authenticated());
 
     http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     http.oauth2ResourceServer(
@@ -40,4 +38,10 @@ public class SecurityConfig {
 
     return http.build();
   }
+
+  @Bean
+  public KeycloakConfigResolver keycloakConfigResolver() {
+    return new KeycloakSpringBootConfigResolver();
+  }
+
 }

@@ -1,12 +1,11 @@
 package com.hcl.flight.userservice.controller;
 
 import com.hcl.flight.userservice.dto.UserDTO;
+import com.hcl.flight.userservice.dto.request.LoginRequest;
+import com.hcl.flight.userservice.dto.response.LoginResponse;
 import com.hcl.flight.userservice.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 

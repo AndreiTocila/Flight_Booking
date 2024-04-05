@@ -7,7 +7,6 @@ services:
     restart: always
     networks:
       flight-book-network:
-
     ports:
       - "5433:5432"
     environment:
