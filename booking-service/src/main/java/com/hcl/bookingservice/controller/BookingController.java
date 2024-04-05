@@ -5,10 +5,8 @@ import com.hcl.bookingservice.dto.BookingDTO;
 import com.hcl.bookingservice.service.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -29,5 +27,11 @@ public class BookingController
         return bookingService.saveBooking(bookingDTO)
                 .map(booking -> new ResponseEntity<>(booking, HttpStatus.CREATED))
                 .log();
+    }
+
+    @GetMapping("/expired")
+    public ResponseEntity<Flux<Booking>> getAllExpiredBookings()
+    {
+        return new ResponseEntity<>(bookingService.findAllExpired(), HttpStatus.OK);
     }
 }

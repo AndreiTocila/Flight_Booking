@@ -42,6 +42,7 @@ public class BookingServiceImpl implements BookingService
         booking.setId(null);
         booking.setNumberOfSeats(bookingDTO.getNumberOfSeats());
         booking.setStatus("RESERVED");
+        booking.setUserId("testUserId");
         booking.setExpirationDate(LocalDateTime.now().plusMinutes(15L));
 
         Mono<FlightDetailsDTO> flightDetailsDTOMono = userServiceRestClient.getFlightDetails(bookingDTO.getFlightId());
@@ -59,6 +60,12 @@ public class BookingServiceImpl implements BookingService
                     return bookingRepository.save(booking).doOnNext(kafkaService::sendAddBookingMessages);
                 })
                 .log();
+    }
+
+    @Override
+    public Flux<Booking> findAllExpired()
+    {
+        return bookingRepository.findByExpirationDateLessThanAndStatus(LocalDateTime.now().minusMinutes(15L), "RESERVED");
     }
 
 

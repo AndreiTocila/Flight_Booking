@@ -10,15 +10,21 @@ public class FlightDetailsDTO
 
     private String arrival;
 
+    private Double price;
+
+    private String iban;
+
     public FlightDetailsDTO()
     {
     }
 
-    public FlightDetailsDTO(Long id, String departure, String arrival)
+    public FlightDetailsDTO(Long id, String departure, String arrival, Double price, String iban)
     {
         this.id = id;
         this.departure = departure;
         this.arrival = arrival;
+        this.price = price;
+        this.iban = iban;
     }
 
     public Long getId()
@@ -51,6 +57,26 @@ public class FlightDetailsDTO
         this.arrival = arrival;
     }
 
+    public Double getPrice()
+    {
+        return price;
+    }
+
+    public void setPrice(Double price)
+    {
+        this.price = price;
+    }
+
+    public String getIban()
+    {
+        return iban;
+    }
+
+    public void setIban(String iban)
+    {
+        this.iban = iban;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -63,13 +89,13 @@ public class FlightDetailsDTO
             return false;
         }
         FlightDetailsDTO that = (FlightDetailsDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(departure, that.departure) && Objects.equals(arrival, that.arrival);
+        return Objects.equals(id, that.id) && Objects.equals(departure, that.departure) && Objects.equals(arrival, that.arrival) && Objects.equals(price, that.price) && Objects.equals(iban, that.iban);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, departure, arrival);
+        return Objects.hash(id, departure, arrival, price, iban);
     }
 
     @Override
@@ -79,6 +105,8 @@ public class FlightDetailsDTO
                 "id=" + id +
                 ", departure='" + departure + '\'' +
                 ", arrival='" + arrival + '\'' +
+                ", price=" + price +
+                ", iban='" + iban + '\'' +
                 '}';
     }
 }

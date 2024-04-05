@@ -16,12 +16,12 @@ public class MockUserController
     @GetMapping("/flight/{id}")
     public Mono<FlightDetailsDTO> getFlight(@PathVariable Long id)
     {
-        return Mono.just(new FlightDetailsDTO(10L, "Bucuresti", "Iasi"));
+        return Mono.just(new FlightDetailsDTO(10L, "Bucuresti", "Iasi", 150.00, "companyIban"));
     }
 
     @GetMapping("/cardDetails/{id}")
     public Mono<CardDetailsDTO> getCardDetails(@PathVariable Long id)
     {
-        return Mono.just(new CardDetailsDTO(10L, "sdsadsdasdsadSA"));
+        return Mono.just(new CardDetailsDTO(10L, "clientIban"));
     }
 }

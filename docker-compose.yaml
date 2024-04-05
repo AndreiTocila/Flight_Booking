@@ -73,25 +73,25 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8099,PLAINTEXT://kafka3:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
     restart: unless-stopped
-#
-#  schema-registry:
-#    image: confluentinc/cp-schema-registry:latest
-#    hostname: schema-registry
-#    networks:
-#      project:
-#    ports:
-#      - "8081:8081"
-#    depends_on:
-#      - zookeeper
-#      - kafka1
-#      - kafka2
-#      - kafka3
-#    environment:
-#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
-#      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
-#      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092, kafka2:9092, kafka3:9092
-#      SCHEMA_REGISTRY_DEBUG: 'true'
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:latest
+    hostname: schema-registry
+    networks:
+      project:
+    ports:
+      - "8081:8081"
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
+      - kafka3
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092, kafka2:9092, kafka3:9092
+      SCHEMA_REGISTRY_DEBUG: 'true'
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -135,6 +135,8 @@ services:
       - booking-service-db
     environment:
       - spring.data.mongodb.uri=mongodb://booking-service-db:27017/Bookings
+      - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+      - schema.registry.url=http://schema-registry:8081
 
   booking-service-db:
     container_name: booking-service-db

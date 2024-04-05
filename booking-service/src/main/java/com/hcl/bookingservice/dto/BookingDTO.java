@@ -12,6 +12,13 @@ public class BookingDTO
     {
     }
 
+    public BookingDTO(Long flightId, Long cardDetailsId, Integer numberOfSeats)
+    {
+        this.flightId = flightId;
+        this.cardDetailsId = cardDetailsId;
+        this.numberOfSeats = numberOfSeats;
+    }
+
     public Long getFlightId()
     {
         return flightId;
