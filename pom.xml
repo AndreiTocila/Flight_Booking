@@ -12,7 +12,9 @@
 
     <modules>
         <module>user-service</module>
+        <module>operator-service</module>
         <module>flight-search-service</module>
+        <module>eureka-service</module>
     </modules>
 
     <properties>

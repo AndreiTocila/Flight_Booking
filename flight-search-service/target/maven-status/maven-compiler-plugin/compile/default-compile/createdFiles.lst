@@ -1,10 +1,7 @@
-com\hcl\flight\flightsearch\model\Operator.class
-com\hcl\flight\flightsearch\model\Flight.class
-com\hcl\flight\flightsearch\FlightSearchApplication.class
-com\hcl\flight\flightsearch\repository\OperatorRepository.class
-com\hcl\flight\flightsearch\repository\FlightRepository.class
-com\hcl\flight\flightsearch\service\FlightSearchService.class
-com\hcl\flight\flightsearch\model\SearchCriteria.class
-com\hcl\flight\flightsearch\controller\MockOperatorController.class
-com\hcl\flight\flightsearch\service\MockOperatorService.class
-com\hcl\flight\flightsearch\controller\FlightSearchController.class
+com\hcl\flightsearch\configuration\WebClientConfig.class
+com\hcl\flightsearch\model\Flight.class
+com\hcl\flightsearch\controller\FlightSearchController.class
+com\hcl\flightsearch\FlightSearchApplication.class
+com\hcl\flightsearch\service\client\OperatorServiceClient.class
+com\hcl\flightsearch\model\SearchCriteria.class
+com\hcl\flightsearch\service\FlightSearchService.class

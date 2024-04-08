@@ -1,0 +1,6 @@
+com\hcl\flight\operatorservice\service\OperatorService.class
+com\hcl\flight\operatorservice\FlightSearchApplication.class
+com\hcl\flight\operatorservice\repository\FlightRepository.class
+com\hcl\flight\operatorservice\model\Flight.class
+com\hcl\flight\operatorservice\model\SearchCriteria.class
+com\hcl\flight\operatorservice\controller\OperatorController.class

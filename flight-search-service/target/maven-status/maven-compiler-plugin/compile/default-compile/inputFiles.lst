@@ -1,10 +1,7 @@
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\FlightSearchApplication.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\service\MockOperatorService.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\controller\MockOperatorController.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\service\FlightSearchService.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\model\SearchCriteria.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\model\Operator.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\repository\FlightRepository.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\model\Flight.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\repository\OperatorRepository.java
-C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flight\flightsearch\controller\FlightSearchController.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\model\Flight.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\model\SearchCriteria.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\configuration\WebClientConfig.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\service\client\OperatorServiceClient.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\service\FlightSearchService.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\FlightSearchApplication.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\controller\FlightSearchController.java

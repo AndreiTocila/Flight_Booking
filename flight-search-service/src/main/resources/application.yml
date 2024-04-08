@@ -8,6 +8,9 @@ spring:
       time: iso
   application:
     name: flight-search-service
-  data:
-    mongodb:
-      uri: mongodb://mongodb:27017/flightsearchdb
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+
+
