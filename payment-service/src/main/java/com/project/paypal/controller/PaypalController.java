@@ -3,19 +3,25 @@ package com.project.paypal.controller;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
+import com.project.PaymentDTO;
 import com.project.paypal.service.PaypalService;
+import com.project.paypal.service.Producer;
+import com.project.paypal.utils.PaymentMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequiredArgsConstructor
+@RestController
 public class PaypalController {
 
     private final PaypalService paypalService;
+
+    @Autowired
+    private final Producer producer;
 
     @GetMapping("/")
     public String home() {
@@ -75,5 +81,21 @@ public class PaypalController {
     @GetMapping("/payment/error")
     public String paymentError(){
         return "paymentError";
+    }
+
+//    @PostMapping("/publish")
+//    public void sendMessage(@RequestBody PaymentMessage paymentMessage){
+//        producer.sendMessage(paymentMessage);
+//    }
+
+    @PostMapping("/validate")
+    public void validateMessage(@RequestBody PaymentDTO paymentDTO){
+//        if (!paymentDTO.getIbanClient().matches("^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,30}$")) {
+//            throw new IllegalArgumentException("Invalid IBAN for client");
+//        }
+//        if (!paymentDTO.getIbanOperator().matches("^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,30}$")) {
+//            throw new IllegalArgumentException("Invalid IBAN for operator");
+//        }
+        producer.sendValidate(paymentDTO);
     }
 }
