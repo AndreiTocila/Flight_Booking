@@ -8,16 +8,13 @@ import com.hcl.bookingservice.repository.BookingRepository;
 import com.hcl.bookingservice.service.BookingService;
 import com.hcl.bookingservice.service.KafkaService;
 import com.hcl.bookingservice.service.UserServiceRestClient;
-import org.bson.internal.BsonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class BookingServiceImpl implements BookingService
@@ -60,6 +57,45 @@ public class BookingServiceImpl implements BookingService
                     return bookingRepository.save(booking).doOnNext(kafkaService::sendAddBookingMessages);
                 })
                 .log();
+    }
+
+    @Override
+    public void updateBookingAfterAdminValidation(ConsumerRecord<Long, GenericRecord> record)
+    {
+        GenericRecord genericRecord = record.value();
+        bookingRepository.findById((String) genericRecord.get("bookingId"))
+                .flatMap(booking ->
+                {
+                    Boolean validated = (Boolean) genericRecord.get("statusValidation");
+                    if (validated)
+                    {
+                        kafkaService.sendAfterAdminValidationMessages(record.key(), booking);
+                        return Mono.just(booking);
+                    }
+                    else
+                    {
+                        booking.setStatus("REJECTED");
+                        return bookingRepository.save(booking);
+                    }
+                })
+                .subscribe();
+    }
+
+    @Override
+    public void updateBookingAfterPaymentValidation(ConsumerRecord<Long, GenericRecord> record)
+    {
+        GenericRecord genericRecord = record.value();
+        bookingRepository.findById((String) genericRecord.get("bookingId"))
+                .flatMap(booking ->
+                {
+                    Boolean validated = (Boolean) genericRecord.get("statusValidation");
+                    String status = validated ? "ACCEPTED" : "REJECTED";
+                    kafkaService.sendAfterPaymentValidationMessages(booking, status);
+
+                    booking.setStatus(status);
+                    return bookingRepository.save(booking);
+                })
+                .subscribe();
     }
 
     @Override

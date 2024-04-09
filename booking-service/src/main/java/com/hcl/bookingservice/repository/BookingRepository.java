@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
 import java.time.LocalDateTime;
 
 @Repository
-public interface BookingRepository extends ReactiveMongoRepository<Booking, Long>
+public interface BookingRepository extends ReactiveMongoRepository<Booking, String>
 {
     Flux<Booking> findByExpirationDateLessThanAndStatus(LocalDateTime localDateTime, String status);
 }

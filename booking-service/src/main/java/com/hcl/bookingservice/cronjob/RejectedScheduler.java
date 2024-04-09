@@ -19,7 +19,7 @@ public class RejectedScheduler
         this.bookingRepository = bookingRepository;
     }
 
-    @Scheduled(fixedRate = 120_000)
+    @Scheduled(fixedRate = 300_000)
     public void setStatusToRejected()
     {
         System.out.println("Cheching RejectedScheduler");

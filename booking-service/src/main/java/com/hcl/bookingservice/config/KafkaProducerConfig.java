@@ -1,5 +1,6 @@
 package com.hcl.bookingservice.config;
 
+import com.hcl.kafka.dto.AdminFeedback;
 import com.hcl.kafka.dto.PaymentDTO;
 import com.hcl.kafka.dto.SeatReservationDTO;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
@@ -83,5 +84,18 @@ public class KafkaProducerConfig
     public KafkaTemplate<String, String> notificationKafkaTemplate()
     {
         return new KafkaTemplate<>(notificationProducerFactory());
+    }
+
+
+
+    @Bean
+    public ProducerFactory<Long, AdminFeedback> adminFeedbackProducerFactory()
+    {
+        return new DefaultKafkaProducerFactory<>(getAvroProducerProperties(LongSerializer.class));
+    }
+    @Bean
+    public KafkaTemplate<Long, AdminFeedback> adminFeedbackKafkaTemplate()
+    {
+        return new KafkaTemplate<>(adminFeedbackProducerFactory());
     }
 }

@@ -5,10 +5,10 @@ import com.hcl.bookingservice.dto.FlightDetailsDTO;
 import com.hcl.bookingservice.service.KafkaService;
 import com.hcl.kafka.dto.PaymentDTO;
 import com.hcl.kafka.dto.SeatReservationDTO;
+import org.apache.avro.generic.GenericRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -38,9 +38,7 @@ public class KafkaServiceImpl implements KafkaService
             FlightDetailsDTO flightDetails = booking.getFlight();
 
             sendAdminMessage(flightDetails.getId(), booking.getId(), booking.getNumberOfSeats());
-
-            sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIban(), flightDetails.getPrice() * booking.getNumberOfSeats());
-
+//            sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIban(), flightDetails.getPrice() * booking.getNumberOfSeats());
             sendNotificationMessage(booking.getId(), flightDetails, booking.getStatus());
 
             return null;
@@ -56,7 +54,18 @@ public class KafkaServiceImpl implements KafkaService
         });
     }
 
+    @Override
+    public void sendAfterAdminValidationMessages(Long flightId, Booking booking)
+    {
+        FlightDetailsDTO flightDetails = booking.getFlight();
+        sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIban(), flightDetails.getPrice() * booking.getNumberOfSeats());
+    }
 
+    @Override
+    public void sendAfterPaymentValidationMessages(Booking booking, String status)
+    {
+        sendNotificationMessage(booking.getId(), booking.getFlight(), booking.getStatus());
+    }
 
     private void sendAdminMessage(Long flightId, String bookingId, Integer numberOfSeats)
     {
@@ -117,9 +126,9 @@ public class KafkaServiceImpl implements KafkaService
         StringBuilder sb = new StringBuilder();
         sb.append("Flight from");
         sb.append(departure);
-        sb.append("to");
+        sb.append(" to ");
         sb.append(arrival);
-        sb.append(".");
+        sb.append(". ");
         sb.append("STATUS: ");
         sb.append(status);
 
