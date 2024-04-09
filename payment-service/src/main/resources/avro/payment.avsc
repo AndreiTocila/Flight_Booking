@@ -1,0 +1,23 @@
+{
+  "namespace": "com.project",
+  "name": "PaymentDTO",
+  "type": "record",
+  "fields": [
+    {
+      "name": "bookingId",
+      "type": "string"
+    },
+    {
+      "name": "ibanClient",
+      "type": "string"
+    },
+    {
+      "name": "ibanOperator",
+      "type": "string"
+    },
+    {
+      "name": "price",
+      "type": "double"
+    }
+  ]
+}

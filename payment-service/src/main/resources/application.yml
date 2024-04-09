@@ -1,0 +1,43 @@
+paypal:
+  client-id: AS3bJBbQWlloR5ukRznactmyKC26Oxck8YZGb3In0R6cyh8gWbqHiS3cG38sfmmqw1GqLdwhMdFVvKyo
+  client-secret: EBtnoxyjXRjApWEUHFzR5kRyTvatTCu6IOB0XY3RlJeRqhD_9Oh905EnOtHW8ZtQl0sB3srnxa9speFF
+  mode: sandbox
+
+topic:
+  name: bogTopic
+
+return:
+  url: http://localhost:8080/payment/success
+cancel:
+  url: http://localhost:8080/payment/error
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: paypal
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
+      group-id: bogGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema:
+          registry:
+            url: "http://localhost:8081"
+        specific:
+          avro:
+            reader: "true"
+
+    producer:
+      bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema:
+          registry:
+            url: "http://localhost:8081"
+
