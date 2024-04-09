@@ -1,0 +1,15 @@
+{
+  "namespace": "com.hcl.kafka.dto",
+  "name": "SeatReservationDTO",
+  "type": "record",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "numberOfSeats",
+      "type": "int"
+    }
+  ]
+}
