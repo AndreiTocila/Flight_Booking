@@ -6,6 +6,11 @@ paypal:
 topic:
   name: bogTopic
 
+return:
+  url: http://localhost:8080/payment/success
+cancel:
+  url: http://localhost:8080/payment/error
+
 spring:
   data:
     mongodb:
