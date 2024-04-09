@@ -1,1 +1,2 @@
 com\hcl\bookingservice\BookingServiceApplicationTests.class
+com\hcl\bookingservice\kafka\AdminKafkaTest.class

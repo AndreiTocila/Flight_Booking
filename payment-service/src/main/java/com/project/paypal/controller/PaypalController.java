@@ -1,7 +1,8 @@
 package com.project.paypal.controller;
 
-import com.project.PaymentDTO;
-import com.project.paypal.service.PayPalService;
+
+import com.hcl.kafka.dto.PaymentDTO;
+import com.project.paypal.service.PaypalService;
 import com.project.paypal.service.Producer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PaypalController {
 
-    private final PayPalService paypalService;
+    private final PaypalService paypalService;
 
     @Autowired
     private final Producer producer;

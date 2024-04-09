@@ -1,6 +1,7 @@
 package com.project.paypal.service;
 
-import com.project.PaymentDTO;
+
+import com.hcl.kafka.dto.PaymentDTO;
 import org.springframework.stereotype.Service;
 
 @Service

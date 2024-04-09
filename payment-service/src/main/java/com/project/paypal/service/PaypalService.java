@@ -6,7 +6,6 @@ import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
 import com.project.paypal.repository.OrderPersonasRepository;
-import com.project.paypal.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class PayPalService {
+public class PaypalService
+{
 
     private final PayPalHttpClient payPalHttpClient;
 
@@ -31,7 +31,7 @@ public class PayPalService {
 
 
     @Autowired
-    public PayPalService(PayPalHttpClient payPalHttpClient,
+    public PaypalService(PayPalHttpClient payPalHttpClient,
                          @Value("${return.url}") String returnUrl,
                          @Value("${cancel.url}") String cancelUrl,
                          OrderService orderService, OrderPersonasRepository orderPersonasRepository) {

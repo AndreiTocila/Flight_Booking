@@ -1,10 +1,9 @@
 package com.project.paypal.controller;
 
 import com.project.paypal.model.OrderComplete;
-import com.project.paypal.model.OrderEntity;
 import com.project.paypal.model.OrderPayment;
 import com.project.paypal.model.OrderPersonas;
-import com.project.paypal.service.PayPalService;
+import com.project.paypal.service.PaypalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -13,10 +12,10 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/paypal")
 public class PaymentController {
 
-    private final PayPalService payPalService;
+    private final PaypalService payPalService;
 
     @Autowired
-    public PaymentController(PayPalService payPalService) {
+    public PaymentController(PaypalService payPalService) {
         this.payPalService = payPalService;
     }
 

@@ -133,10 +133,30 @@ services:
       project:
     depends_on:
       - booking-service-db
+      - kafka1
     environment:
       - spring.data.mongodb.uri=mongodb://booking-service-db:27017/Bookings
       - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
       - schema.registry.url=http://schema-registry:8081
+
+  payment-service:
+    build:
+      context: ./payment-service
+      dockerfile: Dockerfile
+    container_name: payment-service
+    ports:
+      - "9091:8080"
+    networks:
+      project:
+    depends_on:
+      - payment-service-db
+      - kafka1
+    environment:
+      - spring.data.mongodb.uri=mongodb://payment-service-db:27018/paypal
+      - spring.kafka.consumer.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+      - spring.kafka.producer.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+      - spring.kafka.consumer.properties.schema.registry-servers=http://schema-registry:8081
+      - spring.kafka.producer.properties.schema.registry-servers=http://schema-registry:8081
 
   booking-service-db:
     container_name: booking-service-db
@@ -151,8 +171,22 @@ services:
       - project
     restart: unless-stopped
 
+  payment-service-db:
+    container_name: payment-service-db
+    image: mongo:latest
+    ports:
+      - '27018:27017'
+    environment:
+      MONGO_INITDB_DATABASE: paypal
+    volumes:
+      - payment-service-db-data:/data/db
+    networks:
+      - project
+    restart: unless-stopped
+
 networks:
   project:
 
 volumes:
   booking-service-db-data:
+  payment-service-db-data:

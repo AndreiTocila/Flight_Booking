@@ -1,6 +1,7 @@
 package com.project.paypal.service;
 
-import com.project.PaymentDTO;
+
+import com.hcl.kafka.dto.PaymentDTO;
 import com.project.PaymentValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,6 @@ public class Consumer {
         PaymentValidation paymentValidation = new PaymentValidation();
         paymentValidation.setBookingId(value.getBookingId());
         paymentValidation.setStatusValidation(validated);
-        kafkaTemplate.send("payment-feedback", key, paymentValidation);
+        kafkaTemplate.send("payment_feedback", key, paymentValidation);
     }
 }
