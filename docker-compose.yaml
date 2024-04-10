@@ -76,6 +76,7 @@ services:
 
   schema-registry:
     image: confluentinc/cp-schema-registry:latest
+    container_name: schema-registry
     hostname: schema-registry
     networks:
       project:
@@ -133,6 +134,7 @@ services:
       project:
     depends_on:
       - booking-service-db
+      - schema-registry
       - kafka1
     environment:
       - spring.data.mongodb.uri=mongodb://booking-service-db:27017/Bookings
@@ -150,6 +152,7 @@ services:
       project:
     depends_on:
       - payment-service-db
+      - schema-registry
       - kafka1
     environment:
       - spring.data.mongodb.uri=mongodb://payment-service-db:27018/paypal
