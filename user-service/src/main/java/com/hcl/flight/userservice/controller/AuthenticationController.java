@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/authentication")
 public class AuthenticationController {
-    private final UserService userService;
+  private final UserService userService;
 
-    public AuthenticationController(UserService userService) {
-        this.userService = userService;
-    }
-    @GetMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest){
-        return userService.authenticateUser(loginRequest);
-    }
+  public AuthenticationController(UserService userService) {
+    this.userService = userService;
+  }
+
+  @GetMapping("/login")
+  public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+    return userService.authenticateUser(loginRequest);
+  }
 }

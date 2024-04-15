@@ -26,9 +26,6 @@ public class User {
   @Column(name = "email")
   private String email;
 
-  @Column(name = "password")
-  private String password;
-
   @Column(name = "address")
   private String address;
 
@@ -38,23 +35,26 @@ public class User {
   @Column(name = "iban")
   private String iban;
 
+  @Column(name = "role")
+  private String role;
+
   public User(
       Long id,
       String firstName,
       String lastName,
       String email,
-      String password,
       String address,
       String phoneNumber,
-      String iban) {
+      String iban,
+      String role) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
-    this.password = password;
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.iban = iban;
+    this.role = role;
   }
 
   public User() {}
@@ -91,14 +91,6 @@ public class User {
     this.email = email;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
   public String getAddress() {
     return address;
   }
@@ -123,6 +115,14 @@ public class User {
     this.iban = iban;
   }
 
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -131,7 +131,6 @@ public class User {
         && Objects.equals(getFirstName(), user.getFirstName())
         && Objects.equals(getLastName(), user.getLastName())
         && Objects.equals(getEmail(), user.getEmail())
-        && Objects.equals(getPassword(), user.getPassword())
         && Objects.equals(getAddress(), user.getAddress())
         && Objects.equals(getPhoneNumber(), user.getPhoneNumber())
         && Objects.equals(getIban(), user.getIban());
@@ -144,7 +143,6 @@ public class User {
         getFirstName(),
         getLastName(),
         getEmail(),
-        getPassword(),
         getAddress(),
         getPhoneNumber(),
         getIban());

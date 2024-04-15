@@ -24,6 +24,7 @@
             <column name="name" type="VARCHAR(50)"/>
             <column name="iban" type="VARCHAR(50)"/>
             <column name="uri" type="VARCHAR(100)"/>
+            <column name="user_id" type="bigint"/>
         </createTable>
 
     </changeSet>

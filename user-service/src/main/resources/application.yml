@@ -7,6 +7,10 @@ server:
   port: 9001
 
 spring:
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -43,14 +47,20 @@ spring:
         jwt:
           issuer-uri: http://localhost:8080/realms/spring-app
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
-keycloak:
-  enabled: true
-  principal-attribute: preferred_username
-  public-client: true
-  realm: spring-app
-  client:
-
-
+#keycloak:
+#  enabled: true
+#  principal-attribute: preferred_username
+#  public-client: true
+#  realm: spring-app
+#  auth-server-url : http://localhost:8080/
+#  use-resource-role-mappings: true
+kafka:
+  bootstrap-servers:
+    localhost:8097,localhost:8098,localhost:8099
+schema:
+  registry:
+    url:
+      http://localhost:8081
 conf-jwt:
   principal-attribute: principal_username
   resource-id: login-app

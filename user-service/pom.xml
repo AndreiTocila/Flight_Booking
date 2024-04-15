@@ -59,11 +59,6 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 
@@ -105,6 +100,29 @@
             <groupId>org.passay</groupId>
             <artifactId>passay</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>3.2.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>7.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.11.3</version>
         </dependency>
 
     </dependencies>
@@ -166,6 +184,25 @@
                 <compilerArgument>-parameters</compilerArgument>
             </configuration>
         </plugin>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>1.11.3</version>
+                <executions>
+                    <execution>
+                        <id>schema</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <stringType>String</stringType>
+                            <sourceDirectory>${project.basedir}/src/main/resources</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
     </plugins>
     </build>
@@ -178,6 +215,10 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
 

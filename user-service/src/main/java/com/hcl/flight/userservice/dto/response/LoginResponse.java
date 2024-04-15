@@ -6,21 +6,20 @@ import com.hcl.flight.userservice.dto.response.data.LoginResponseData;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoginResponse {
-    @JsonProperty("data")
-    private LoginResponseData loginResponseData;
+  @JsonProperty("data")
+  private LoginResponseData loginResponseData;
 
-    public LoginResponse(LoginResponseData loginResponseData) {
-        this.loginResponseData = loginResponseData;
-    }
+  public LoginResponse(LoginResponseData loginResponseData) {
+    this.loginResponseData = loginResponseData;
+  }
 
-    public LoginResponse() {
-    }
+  public LoginResponse() {}
 
-    public LoginResponseData getLoginResponseData() {
-        return loginResponseData;
-    }
+  public LoginResponseData getLoginResponseData() {
+    return loginResponseData;
+  }
 
-    public void setLoginResponseData(LoginResponseData loginResponseData) {
-        this.loginResponseData = loginResponseData;
-    }
+  public void setLoginResponseData(LoginResponseData loginResponseData) {
+    this.loginResponseData = loginResponseData;
+  }
 }

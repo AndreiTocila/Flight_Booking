@@ -1,9 +1,6 @@
 package com.hcl.flight.userservice.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(schema = "user_service", name = "operators")
@@ -21,11 +18,16 @@ public class Operator {
   @Column(name = "uri")
   private String uri;
 
-  public Operator(Long id, String name, String iban, String uri) {
+  @OneToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User userId;
+
+  public Operator(Long id, String name, String iban, String uri, User userId) {
     this.id = id;
     this.name = name;
     this.iban = iban;
     this.uri = uri;
+    this.userId = userId;
   }
 
   public Operator() {}
@@ -60,5 +62,13 @@ public class Operator {
 
   public void setUri(String uri) {
     this.uri = uri;
+  }
+
+  public User getUserId() {
+    return userId;
+  }
+
+  public void setUserId(User userId) {
+    this.userId = userId;
   }
 }

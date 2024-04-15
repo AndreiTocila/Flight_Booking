@@ -5,7 +5,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd"
         logicalFilePath="config/liquibase/changelogs/phase1/phase1_changelog.xml">
 
-    <include file="changesets/create_operator_table.xml" relativeToChangelogFile="true"/>
-    <include file="changesets/create_fk_operator.xml" relativeToChangelogFile="true"/>
+    <include file="changesets/create_flight_table.xml" relativeToChangelogFile="true"/>
+    <include file="changesets/create_fk_flights.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

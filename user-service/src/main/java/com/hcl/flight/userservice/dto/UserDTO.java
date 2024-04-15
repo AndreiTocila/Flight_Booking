@@ -1,5 +1,7 @@
 package com.hcl.flight.userservice.dto;
 
+import com.hcl.flight.userservice.model.User;
+
 public class UserDTO {
   private Long id;
 
@@ -17,23 +19,18 @@ public class UserDTO {
 
   private String iban;
 
-  public UserDTO(
-      Long id,
-      String firstName,
-      String lastName,
-      String email,
-      String password,
-      String address,
-      String phoneNumber,
-      String iban) {
+  private User user;
+
+  public UserDTO(Long id, String firstName, String email, String lastName, String password, String address, String phoneNumber, String iban, User user) {
     this.id = id;
     this.firstName = firstName;
-    this.lastName = lastName;
     this.email = email;
+    this.lastName = lastName;
     this.password = password;
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.iban = iban;
+    this.user = user;
   }
 
   public UserDTO() {}
@@ -100,5 +97,13 @@ public class UserDTO {
 
   public void setIban(String iban) {
     this.iban = iban;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 }

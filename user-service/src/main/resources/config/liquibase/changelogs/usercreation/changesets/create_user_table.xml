@@ -33,10 +33,10 @@
             <column name="email" type="VARCHAR(50)">
                 <constraints unique="true" uniqueConstraintName="users_email_unique_constraint"/>
             </column>
-            <column name="password" type="VARCHAR(100)"/>
             <column name="address" type="VARCHAR(100)"/>
             <column name="phone_number" type="VARCHAR(100)"/>
             <column name="iban" type="VARCHAR(100)"/>
+            <column name="role" type="varchar(50)"/>
         </createTable>
 
     </changeSet>

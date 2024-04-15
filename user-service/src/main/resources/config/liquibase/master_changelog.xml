@@ -7,5 +7,6 @@
 
     <include file="changelogs/usercreation/user_creation_changelog.xml" relativeToChangelogFile="true"/>
     <include file="changelogs/operatorcreation/operator_creation_changelog.xml" relativeToChangelogFile="true"/>
+    <include file="changelogs/flightcreation/flight_creation_changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

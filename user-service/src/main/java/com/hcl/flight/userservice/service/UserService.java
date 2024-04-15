@@ -5,13 +5,12 @@ import com.hcl.flight.userservice.dto.request.LoginRequest;
 import com.hcl.flight.userservice.dto.response.LoginResponse;
 import com.hcl.flight.userservice.dto.response.data.LoginResponseData;
 import com.hcl.flight.userservice.mapper.UserMapper;
-import com.hcl.flight.userservice.model.User;
 import com.hcl.flight.userservice.repository.UserRepository;
-import org.keycloak.admin.client.Keycloak;
 import org.keycloak.authorization.client.AuthzClient;
 import org.keycloak.representations.idm.authorization.AuthorizationRequest;
 import org.keycloak.representations.idm.authorization.AuthorizationResponse;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Optional;
 
@@ -26,9 +25,8 @@ public class UserService {
     this.userMapper = userMapper;
   }
 
-  public UserDTO findById(Long id) {
-    Optional<User> user = userRepository.findById(id);
-    return user.map(userMapper::entityToDTO).orElse(null);
+  public Optional<UserDTO> findById(Long id) {
+    return userRepository.findById(id).map(userMapper::entityToDTO);
   }
 
   public LoginResponse authenticateUser(LoginRequest loginRequest) {
@@ -41,13 +39,16 @@ public class UserService {
             .authorize(authorizationRequest);
     String rpt = response.getToken();
     UserDTO userDTO =
-        userMapper.entityToDTO(userRepository.findByEmail(loginRequest.getUsername()).get());
+        userMapper.entityToDTO(userRepository.findByEmail(loginRequest.getUsername()));
 
-    LoginResponseData loginResponseData = new LoginResponseData();
-    loginResponseData.setAuthenticationToken(rpt);
-    loginResponseData.setUserDTO(userDTO);
-    LoginResponse loginResponse = new LoginResponse();
-    loginResponse.setLoginResponseData(loginResponseData);
-    return loginResponse;
+    if (userDTO != null) {
+      LoginResponseData loginResponseData = new LoginResponseData();
+      loginResponseData.setAuthenticationToken(rpt);
+      loginResponseData.setUserDTO(userDTO);
+      LoginResponse loginResponse = new LoginResponse();
+      loginResponse.setLoginResponseData(loginResponseData);
+      return loginResponse;
+    }
+    return null;
   }
 }
