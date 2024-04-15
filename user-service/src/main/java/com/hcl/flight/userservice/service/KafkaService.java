@@ -36,9 +36,7 @@ public class KafkaService {
     AdminFeedback adminFeedback = new AdminFeedback();
     adminFeedback.setBookingId((String) consumerRecord.value().get("bookingId"));
     boolean status =
-        statusValidation(
-            consumerRecord.key(),
-            (Long) consumerRecord.value().get("numberOfSeats"));
+        statusValidation(consumerRecord.key(), (Long) consumerRecord.value().get("numberOfSeats"));
     adminFeedback.setStatusValidation(status);
     adminFeedbackKafkaTemplate.send("admin_feedback", consumerRecord.key(), adminFeedback);
   }
@@ -46,13 +44,15 @@ public class KafkaService {
   private boolean statusValidation(Long flightNumber, Long bookedSeats) {
     boolean status = false;
     FlightOperator flightOperator = flightRepository.findByFlightNumber(flightNumber).get();
-    if (bookedSeats > 0) {
-      flightOperator.setNumberOfSeats(flightOperator.getNumberOfSeats() - bookedSeats);
-      status = true;
-    } else if (bookedSeats < 0) {
-      flightOperator.setNumberOfSeats(flightOperator.getNumberOfSeats() + Math.abs(bookedSeats));
+    if (bookedSeats <= flightOperator.getNumberOfSeats()) {
+      if (bookedSeats > 0) {
+        flightOperator.setNumberOfSeats(flightOperator.getNumberOfSeats() - bookedSeats);
+        status = true;
+      } else if (bookedSeats < 0) {
+        flightOperator.setNumberOfSeats(flightOperator.getNumberOfSeats() + Math.abs(bookedSeats));
+      }
+      flightRepository.save(flightOperator);
     }
-    flightRepository.save(flightOperator);
     return status;
   }
 }

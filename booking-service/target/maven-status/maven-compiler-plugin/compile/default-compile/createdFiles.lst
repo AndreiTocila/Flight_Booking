@@ -2,7 +2,6 @@ com\hcl\bookingservice\domain\Booking.class
 com\hcl\bookingservice\service\KafkaService.class
 com\hcl\bookingservice\dto\FlightDetailsDTO.class
 com\hcl\kafka\dto\AdminFeedback.class
-com\hcl\bookingservice\controller\MockUserController.class
 com\hcl\bookingservice\service\impl\KafkaServiceImpl.class
 com\hcl\bookingservice\dto\CardDetailsDTO.class
 com\hcl\bookingservice\controller\MockProducerController.class
@@ -11,7 +10,6 @@ com\hcl\bookingservice\dto\BookingDTO.class
 com\hcl\bookingservice\service\impl\BookingServiceImpl.class
 com\hcl\bookingservice\config\WebClientConfig.class
 com\hcl\bookingservice\kafka\PaymentKafkaConsumer.class
-com\hcl\bookingservice\dto\temp\FlightResponse.class
 com\hcl\bookingservice\BookingServiceApplication.class
 com\hcl\bookingservice\service\impl\UserServiceRestClientImpl.class
 com\hcl\kafka\dto\AdminFeedback$Builder.class
@@ -27,3 +25,4 @@ com\hcl\bookingservice\config\KafkaProducerConfig.class
 com\hcl\bookingservice\controller\BookingController.class
 com\hcl\bookingservice\cronjob\RejectedScheduler.class
 com\hcl\bookingservice\exception\CustomErrorHandler.class
+com\hcl\bookingservice\dto\FlightResponse.class

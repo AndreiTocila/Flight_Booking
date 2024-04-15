@@ -5,7 +5,7 @@
   "resource": "login-app",
   "verify-token-audience": true,
   "credentials": {
-    "secret": "X6nvd3jt049XciqjiRCKbLU6W1B8tv3J"
+    "secret": "gvLIICeWNBEwrQTGSvDMNjAlG8walFVx"
   },
   "use-resource-role-mappings": true,
   "confidential-port": 0,

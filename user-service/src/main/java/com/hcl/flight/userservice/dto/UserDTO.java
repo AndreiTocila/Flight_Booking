@@ -11,7 +11,6 @@ public class UserDTO {
 
   private String email;
 
-  private String password;
 
   private String address;
 
@@ -19,18 +18,16 @@ public class UserDTO {
 
   private String iban;
 
-  private User user;
 
-  public UserDTO(Long id, String firstName, String email, String lastName, String password, String address, String phoneNumber, String iban, User user) {
+  public UserDTO(Long id, String firstName, String email, String lastName , String address, String phoneNumber, String iban, User user) {
     this.id = id;
     this.firstName = firstName;
     this.email = email;
     this.lastName = lastName;
-    this.password = password;
+
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.iban = iban;
-    this.user = user;
   }
 
   public UserDTO() {}
@@ -67,14 +64,6 @@ public class UserDTO {
     this.email = email;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
   public String getAddress() {
     return address;
   }
@@ -99,11 +88,4 @@ public class UserDTO {
     this.iban = iban;
   }
 
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
 }

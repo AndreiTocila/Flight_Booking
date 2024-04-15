@@ -29,6 +29,10 @@ public class UserService {
     return userRepository.findById(id).map(userMapper::entityToDTO);
   }
 
+  public String getIban(String email) {
+    return userRepository.findByEmail(email).getIban();
+  }
+
   public LoginResponse authenticateUser(LoginRequest loginRequest) {
     AuthzClient authzClient = AuthzClient.create();
     AuthorizationRequest authorizationRequest = new AuthorizationRequest();
