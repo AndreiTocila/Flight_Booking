@@ -158,8 +158,8 @@ services:
       - spring.data.mongodb.uri=mongodb://payment-service-db:27018/paypal
       - spring.kafka.consumer.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
       - spring.kafka.producer.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
-      - spring.kafka.consumer.properties.schema.registry-servers=http://schema-registry:8081
-      - spring.kafka.producer.properties.schema.registry-servers=http://schema-registry:8081
+      - spring.kafka.consumer.properties.schema.registry.url=http://schema-registry:8081
+      - spring.kafka.producer.properties.schema.registry.url=http://schema-registry:8081
 
   booking-service-db:
     container_name: booking-service-db

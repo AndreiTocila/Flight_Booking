@@ -3,6 +3,7 @@ package com.hcl.bookingservice.controller;
 
 import com.hcl.bookingservice.dto.CardDetailsDTO;
 import com.hcl.bookingservice.dto.FlightDetailsDTO;
+import com.hcl.bookingservice.dto.temp.FlightResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,9 @@ import reactor.core.publisher.Mono;
 public class MockUserController
 {
     @GetMapping("/flight/{id}")
-    public Mono<FlightDetailsDTO> getFlight(@PathVariable Long id)
+    public FlightResponse getFlight(@PathVariable Long id)
     {
-        return Mono.just(new FlightDetailsDTO(10L, "Bucuresti", "Iasi", 150.00, "RO52RZBR2717288441671358"));
+        return new FlightResponse(new FlightDetailsDTO(3213L, "IASI", "BUCURESTI", 100.00, "RO52RZBR2717288441671358"));
     }
 
     @GetMapping("/cardDetails/{id}")

@@ -5,7 +5,6 @@ import com.hcl.bookingservice.dto.FlightDetailsDTO;
 import com.hcl.bookingservice.service.KafkaService;
 import com.hcl.kafka.dto.PaymentDTO;
 import com.hcl.kafka.dto.SeatReservationDTO;
-import org.apache.avro.generic.GenericRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -55,16 +54,31 @@ public class KafkaServiceImpl implements KafkaService
     }
 
     @Override
-    public void sendAfterAdminValidationMessages(Long flightId, Booking booking)
+    public void sendRejectedMessages(Booking booking, String message)
     {
         FlightDetailsDTO flightDetails = booking.getFlight();
-        sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIban(), flightDetails.getPrice() * booking.getNumberOfSeats());
+        sendAdminMessage(flightDetails.getId(), booking.getId(), -booking.getNumberOfSeats());
+        sendNotificationMessage(booking.getId(), flightDetails, "REJECTED", message);
     }
 
     @Override
-    public void sendAfterPaymentValidationMessages(Booking booking, String status)
+    public void sendAfterAdminValidationMessages(Long flightId, Booking booking)
     {
-        sendNotificationMessage(booking.getId(), booking.getFlight(), booking.getStatus());
+        FlightDetailsDTO flightDetails = booking.getFlight();
+        sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIbanOperator(), flightDetails.getPrice() * booking.getNumberOfSeats());
+    }
+
+    @Override
+    public void sendAfterPaymentValidationMessages(Booking booking, String status, Boolean validated)
+    {
+        if(!validated)
+        {
+            sendRejectedMessages(booking, "Payment failed!");
+        }
+        else
+        {
+            sendNotificationMessage(booking.getId(), booking.getFlight(), booking.getStatus());
+        }
     }
 
     private void sendAdminMessage(Long flightId, String bookingId, Integer numberOfSeats)
@@ -108,7 +122,12 @@ public class KafkaServiceImpl implements KafkaService
 
     private void sendNotificationMessage(String bookingId, FlightDetailsDTO flightDetails, String status)
     {
-        notificationKafkaTemplate.send("notification", bookingId, buildNotificationMessage(flightDetails.getDeparture(), flightDetails.getArrival(), status))
+        sendNotificationMessage(bookingId, flightDetails, status, "");
+    }
+
+    private void sendNotificationMessage(String bookingId, FlightDetailsDTO flightDetails, String status, String otherMentions)
+    {
+        notificationKafkaTemplate.send("notification", bookingId, buildNotificationMessage(flightDetails.getDeparture(), flightDetails.getArrival(), status, otherMentions))
                 .whenComplete((result, exception) ->
                 {
                     if (exception == null)
@@ -121,16 +140,19 @@ public class KafkaServiceImpl implements KafkaService
                 });
     }
 
-    private String buildNotificationMessage(String departure, String arrival, String status)
+    private String buildNotificationMessage(String departure, String arrival, String status, String otherMentions)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("Flight from");
-        sb.append(departure);
-        sb.append(" to ");
-        sb.append(arrival);
-        sb.append(". ");
-        sb.append("STATUS: ");
-        sb.append(status);
+        sb
+                .append("Flight from")
+                .append(departure)
+                .append(" to ")
+                .append(arrival)
+                .append(". ")
+                .append("STATUS: ")
+                .append(status)
+                .append(". ")
+                .append(otherMentions);
 
         return sb.toString();
     }

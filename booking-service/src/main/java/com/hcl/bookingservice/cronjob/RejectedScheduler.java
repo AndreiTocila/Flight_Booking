@@ -1,11 +1,11 @@
 package com.hcl.bookingservice.cronjob;
 
-import com.hcl.bookingservice.domain.Booking;
 import com.hcl.bookingservice.repository.BookingRepository;
+import com.hcl.bookingservice.service.KafkaService;
+import com.hcl.kafka.dto.SeatReservationDTO;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
 
 import java.time.LocalDateTime;
 
@@ -14,9 +14,12 @@ public class RejectedScheduler
 {
     private final BookingRepository bookingRepository;
 
-    public RejectedScheduler(BookingRepository bookingRepository)
+    private final KafkaService kafkaService;
+
+    public RejectedScheduler(BookingRepository bookingRepository, KafkaService kafkaService)
     {
         this.bookingRepository = bookingRepository;
+        this.kafkaService = kafkaService;
     }
 
     @Scheduled(fixedRate = 300_000)
@@ -26,6 +29,7 @@ public class RejectedScheduler
         bookingRepository.findByExpirationDateLessThanAndStatus(LocalDateTime.now().minusMinutes(15L), "RESERVED")
                 .flatMap(booking ->
                 {
+                    kafkaService.sendRejectedMessages(booking, "Time expired!");
                     booking.setStatus("REJECTED");
                     return bookingRepository.save(booking);
                 })

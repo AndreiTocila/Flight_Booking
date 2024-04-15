@@ -90,7 +90,7 @@ public class BookingServiceImpl implements BookingService
                 {
                     Boolean validated = (Boolean) genericRecord.get("statusValidation");
                     String status = validated ? "ACCEPTED" : "REJECTED";
-                    kafkaService.sendAfterPaymentValidationMessages(booking, status);
+                    kafkaService.sendAfterPaymentValidationMessages(booking, status, validated);
 
                     booking.setStatus(status);
                     return bookingRepository.save(booking);
