@@ -9,7 +9,7 @@
     },
     {
       "name": "numberOfSeats",
-      "type": "int"
+      "type": "long"
     }
   ]
 }

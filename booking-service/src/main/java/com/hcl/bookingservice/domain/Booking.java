@@ -15,7 +15,7 @@ public class Booking
     private String id;
     private FlightDetailsDTO flight;
     private CardDetailsDTO cardDetails;
-    private Integer numberOfSeats;
+    private Long numberOfSeats;
     private String userId;
     private String status;
     private LocalDateTime expirationDate;
@@ -24,7 +24,7 @@ public class Booking
     {
     }
 
-    public Booking(String id, FlightDetailsDTO flight, CardDetailsDTO cardDetails, Integer numberOfSeats, String userId, String status, LocalDateTime expirationDate)
+    public Booking(String id, FlightDetailsDTO flight, CardDetailsDTO cardDetails, Long numberOfSeats, String userId, String status, LocalDateTime expirationDate)
     {
         this.id = id;
         this.flight = flight;
@@ -65,12 +65,12 @@ public class Booking
         this.cardDetails = cardDetails;
     }
 
-    public Integer getNumberOfSeats()
+    public Long getNumberOfSeats()
     {
         return numberOfSeats;
     }
 
-    public void setNumberOfSeats(Integer numberOfSeats)
+    public void setNumberOfSeats(Long numberOfSeats)
     {
         this.numberOfSeats = numberOfSeats;
     }

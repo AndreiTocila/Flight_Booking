@@ -11,6 +11,7 @@ com\hcl\bookingservice\dto\BookingDTO.class
 com\hcl\bookingservice\service\impl\BookingServiceImpl.class
 com\hcl\bookingservice\config\WebClientConfig.class
 com\hcl\bookingservice\kafka\PaymentKafkaConsumer.class
+com\hcl\bookingservice\dto\temp\FlightResponse.class
 com\hcl\bookingservice\BookingServiceApplication.class
 com\hcl\bookingservice\service\impl\UserServiceRestClientImpl.class
 com\hcl\kafka\dto\AdminFeedback$Builder.class

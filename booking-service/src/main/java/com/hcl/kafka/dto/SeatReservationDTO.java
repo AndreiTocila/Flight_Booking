@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 759311419709596648L;
+  private static final long serialVersionUID = -748379938904054091L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SeatReservationDTO\",\"namespace\":\"com.hcl.kafka.dto\",\"fields\":[{\"name\":\"id\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"numberOfSeats\",\"type\":\"int\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SeatReservationDTO\",\"namespace\":\"com.hcl.kafka.dto\",\"fields\":[{\"name\":\"bookingId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"numberOfSeats\",\"type\":\"long\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -73,8 +73,8 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
     return DECODER.decode(b);
   }
 
-  private java.lang.String id;
-  private int numberOfSeats;
+  private java.lang.String bookingId;
+  private long numberOfSeats;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -85,11 +85,11 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
 
   /**
    * All-args constructor.
-   * @param id The new value for id
+   * @param bookingId The new value for bookingId
    * @param numberOfSeats The new value for numberOfSeats
    */
-  public SeatReservationDTO(java.lang.String id, java.lang.Integer numberOfSeats) {
-    this.id = id;
+  public SeatReservationDTO(java.lang.String bookingId, java.lang.Long numberOfSeats) {
+    this.bookingId = bookingId;
     this.numberOfSeats = numberOfSeats;
   }
 
@@ -103,7 +103,7 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
   @Override
   public java.lang.Object get(int field$) {
     switch (field$) {
-    case 0: return id;
+    case 0: return bookingId;
     case 1: return numberOfSeats;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
@@ -114,34 +114,34 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: id = value$ != null ? value$.toString() : null; break;
-    case 1: numberOfSeats = (java.lang.Integer)value$; break;
+    case 0: bookingId = value$ != null ? value$.toString() : null; break;
+    case 1: numberOfSeats = (java.lang.Long)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
   /**
-   * Gets the value of the 'id' field.
-   * @return The value of the 'id' field.
+   * Gets the value of the 'bookingId' field.
+   * @return The value of the 'bookingId' field.
    */
-  public java.lang.String getId() {
-    return id;
+  public java.lang.String getBookingId() {
+    return bookingId;
   }
 
 
   /**
-   * Sets the value of the 'id' field.
+   * Sets the value of the 'bookingId' field.
    * @param value the value to set.
    */
-  public void setId(java.lang.String value) {
-    this.id = value;
+  public void setBookingId(java.lang.String value) {
+    this.bookingId = value;
   }
 
   /**
    * Gets the value of the 'numberOfSeats' field.
    * @return The value of the 'numberOfSeats' field.
    */
-  public int getNumberOfSeats() {
+  public long getNumberOfSeats() {
     return numberOfSeats;
   }
 
@@ -150,7 +150,7 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
    * Sets the value of the 'numberOfSeats' field.
    * @param value the value to set.
    */
-  public void setNumberOfSeats(int value) {
+  public void setNumberOfSeats(long value) {
     this.numberOfSeats = value;
   }
 
@@ -195,8 +195,8 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<SeatReservationDTO>
     implements org.apache.avro.data.RecordBuilder<SeatReservationDTO> {
 
-    private java.lang.String id;
-    private int numberOfSeats;
+    private java.lang.String bookingId;
+    private long numberOfSeats;
 
     /** Creates a new Builder */
     private Builder() {
@@ -209,8 +209,8 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
      */
     private Builder(com.hcl.kafka.dto.SeatReservationDTO.Builder other) {
       super(other);
-      if (isValidValue(fields()[0], other.id)) {
-        this.id = data().deepCopy(fields()[0].schema(), other.id);
+      if (isValidValue(fields()[0], other.bookingId)) {
+        this.bookingId = data().deepCopy(fields()[0].schema(), other.bookingId);
         fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
       if (isValidValue(fields()[1], other.numberOfSeats)) {
@@ -225,8 +225,8 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
      */
     private Builder(com.hcl.kafka.dto.SeatReservationDTO other) {
       super(SCHEMA$, MODEL$);
-      if (isValidValue(fields()[0], other.id)) {
-        this.id = data().deepCopy(fields()[0].schema(), other.id);
+      if (isValidValue(fields()[0], other.bookingId)) {
+        this.bookingId = data().deepCopy(fields()[0].schema(), other.bookingId);
         fieldSetFlags()[0] = true;
       }
       if (isValidValue(fields()[1], other.numberOfSeats)) {
@@ -236,41 +236,41 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
     }
 
     /**
-      * Gets the value of the 'id' field.
+      * Gets the value of the 'bookingId' field.
       * @return The value.
       */
-    public java.lang.String getId() {
-      return id;
+    public java.lang.String getBookingId() {
+      return bookingId;
     }
 
 
     /**
-      * Sets the value of the 'id' field.
-      * @param value The value of 'id'.
+      * Sets the value of the 'bookingId' field.
+      * @param value The value of 'bookingId'.
       * @return This builder.
       */
-    public com.hcl.kafka.dto.SeatReservationDTO.Builder setId(java.lang.String value) {
+    public com.hcl.kafka.dto.SeatReservationDTO.Builder setBookingId(java.lang.String value) {
       validate(fields()[0], value);
-      this.id = value;
+      this.bookingId = value;
       fieldSetFlags()[0] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'id' field has been set.
-      * @return True if the 'id' field has been set, false otherwise.
+      * Checks whether the 'bookingId' field has been set.
+      * @return True if the 'bookingId' field has been set, false otherwise.
       */
-    public boolean hasId() {
+    public boolean hasBookingId() {
       return fieldSetFlags()[0];
     }
 
 
     /**
-      * Clears the value of the 'id' field.
+      * Clears the value of the 'bookingId' field.
       * @return This builder.
       */
-    public com.hcl.kafka.dto.SeatReservationDTO.Builder clearId() {
-      id = null;
+    public com.hcl.kafka.dto.SeatReservationDTO.Builder clearBookingId() {
+      bookingId = null;
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -279,7 +279,7 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
       * Gets the value of the 'numberOfSeats' field.
       * @return The value.
       */
-    public int getNumberOfSeats() {
+    public long getNumberOfSeats() {
       return numberOfSeats;
     }
 
@@ -289,7 +289,7 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
       * @param value The value of 'numberOfSeats'.
       * @return This builder.
       */
-    public com.hcl.kafka.dto.SeatReservationDTO.Builder setNumberOfSeats(int value) {
+    public com.hcl.kafka.dto.SeatReservationDTO.Builder setNumberOfSeats(long value) {
       validate(fields()[1], value);
       this.numberOfSeats = value;
       fieldSetFlags()[1] = true;
@@ -319,8 +319,8 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
     public SeatReservationDTO build() {
       try {
         SeatReservationDTO record = new SeatReservationDTO();
-        record.id = fieldSetFlags()[0] ? this.id : (java.lang.String) defaultValue(fields()[0]);
-        record.numberOfSeats = fieldSetFlags()[1] ? this.numberOfSeats : (java.lang.Integer) defaultValue(fields()[1]);
+        record.bookingId = fieldSetFlags()[0] ? this.bookingId : (java.lang.String) defaultValue(fields()[0]);
+        record.numberOfSeats = fieldSetFlags()[1] ? this.numberOfSeats : (java.lang.Long) defaultValue(fields()[1]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -353,9 +353,9 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
   @Override public void customEncode(org.apache.avro.io.Encoder out)
     throws java.io.IOException
   {
-    out.writeString(this.id);
+    out.writeString(this.bookingId);
 
-    out.writeInt(this.numberOfSeats);
+    out.writeLong(this.numberOfSeats);
 
   }
 
@@ -364,19 +364,19 @@ public class SeatReservationDTO extends org.apache.avro.specific.SpecificRecordB
   {
     org.apache.avro.Schema.Field[] fieldOrder = in.readFieldOrderIfDiff();
     if (fieldOrder == null) {
-      this.id = in.readString();
+      this.bookingId = in.readString();
 
-      this.numberOfSeats = in.readInt();
+      this.numberOfSeats = in.readLong();
 
     } else {
       for (int i = 0; i < 2; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
-          this.id = in.readString();
+          this.bookingId = in.readString();
           break;
 
         case 1:
-          this.numberOfSeats = in.readInt();
+          this.numberOfSeats = in.readLong();
           break;
 
         default:

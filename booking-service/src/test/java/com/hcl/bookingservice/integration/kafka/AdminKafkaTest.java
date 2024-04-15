@@ -65,7 +65,7 @@ public class AdminKafkaTest
     public void testKafkaIsUp() throws ExecutionException, InterruptedException
     {
         SeatReservationDTO reservationDTO = new SeatReservationDTO();
-        reservationDTO.setId("bookingId");
+        reservationDTO.setBookingId("bookingId");
         reservationDTO.setNumberOfSeats(5);
 
         CountDownLatch latch = new CountDownLatch(1);

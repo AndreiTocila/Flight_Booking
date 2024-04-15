@@ -37,7 +37,7 @@ public class KafkaService {
     adminFeedback.setBookingId((String) consumerRecord.value().get("bookingId"));
     boolean status =
         statusValidation(
-            Long.valueOf((String) consumerRecord.value().get("bookingId")),
+            consumerRecord.key(),
             (Long) consumerRecord.value().get("numberOfSeats"));
     adminFeedback.setStatusValidation(status);
     adminFeedbackKafkaTemplate.send("admin_feedback", consumerRecord.key(), adminFeedback);

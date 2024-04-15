@@ -7,10 +7,6 @@ server:
   port: 9001
 
 spring:
-  data:
-    r2dbc:
-      repositories:
-        enabled: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -21,7 +17,7 @@ spring:
   application:
     name: user-service
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres?useSSL=false}
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/postgres?useSSL=false}
     username: postgres
     password: admin
     hikari:
