@@ -1,0 +1,15 @@
+{
+  "namespace": "com.project",
+  "type": "record",
+  "name": "PaymentValidation",
+  "fields": [
+    {
+      "name": "bookingId",
+      "type": "string"
+    },
+    {
+      "name": "statusValidation",
+      "type": "boolean"
+    }
+  ]
+}

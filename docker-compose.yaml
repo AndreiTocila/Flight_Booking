@@ -18,31 +18,31 @@ services:
     expose:
       - "5432"
 
-#  flight-book-user-service:
-#    build:
-#      context: ./user-service
-#      dockerfile: Dockerfile
-#    container_name: "user-service"
-#    mem_swappiness: 100
-#    user: "cnb"
-#    entrypoint: "/cnb/process/web"
-#    networks:
-#      flight-book-network:
-#    healthcheck:
-#      test: "curl --fail --silent localhost:9001/userservice/actuator/health | grep UP || exit 1"
-#      interval: 20s
-#      timeout: 5s
-#      retries: 10
-#    depends_on:
-#      flight-book-database:
-#        condition: service_started
-#    environment:
-#      - BPL_JVM_THREAD_COUNT=10
-#      - JAVA_TOOL_OPTIONS=-Xmx64m -Xss256k -XX:MaxMetaspaceSize=100M -XX:ReservedCodeCacheSize=24M
-#      - LIQUIBASE_CONTEXT=local-dev
-#      - DB_URL=jdbc:postgresql://flight-book-database:5432/postgres?useSSL=false
-#    expose:
-#      - "9001"
+  #  flight-book-user-service:
+  #    build:
+  #      context: ./user-service
+  #      dockerfile: Dockerfile
+  #    container_name: "user-service"
+  #    mem_swappiness: 100
+  #    user: "cnb"
+  #    entrypoint: "/cnb/process/web"
+  #    networks:
+  #      flight-book-network:
+  #    healthcheck:
+  #      test: "curl --fail --silent localhost:9001/userservice/actuator/health | grep UP || exit 1"
+  #      interval: 20s
+  #      timeout: 5s
+  #      retries: 10
+  #    depends_on:
+  #      flight-book-database:
+  #        condition: service_started
+  #    environment:
+  #      - BPL_JVM_THREAD_COUNT=10
+  #      - JAVA_TOOL_OPTIONS=-Xmx64m -Xss256k -XX:MaxMetaspaceSize=100M -XX:ReservedCodeCacheSize=24M
+  #      - LIQUIBASE_CONTEXT=local-dev
+  #      - DB_URL=jdbc:postgresql://flight-book-database:5432/postgres?useSSL=false
+  #    expose:
+  #      - "9001"
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -147,8 +147,8 @@ services:
     restart: unless-stopped
 
 volumes:
- flight_book:
+  flight_book:
 
 networks:
- flight-book-network:
+  flight-book-network:
     driver: bridge

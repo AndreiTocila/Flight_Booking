@@ -19,6 +19,11 @@
 
     <modules>
         <module>user-service</module>
+        <module>booking-service</module>
+        <module>payment-service</module>
     </modules>
 
+    <properties>
+        <java.version>17</java.version>
+    </properties>
 </project>
