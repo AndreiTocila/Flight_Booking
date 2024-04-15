@@ -3,6 +3,7 @@ package com.hcl.bookingservice.controller;
 import com.hcl.bookingservice.domain.Booking;
 import com.hcl.bookingservice.dto.BookingDTO;
 import com.hcl.bookingservice.service.BookingService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,9 @@ public class BookingController
     }
 
     @PostMapping()
-    public Mono<ResponseEntity<Booking>> createBooking(@RequestBody BookingDTO bookingDTO)
+    public Mono<ResponseEntity<Booking>> createBooking(@RequestBody BookingDTO bookingDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String token)
     {
-        return bookingService.saveBooking(bookingDTO)
+        return bookingService.saveBooking(bookingDTO, token.replace("Bearer ",""))
                 .map(booking -> new ResponseEntity<>(booking, HttpStatus.CREATED))
                 .log();
     }

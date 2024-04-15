@@ -23,12 +23,13 @@ public class UserServiceRestClientImpl implements UserServiceRestClient
     }
 
     @Override
-    public Mono<FlightDetailsDTO> getFlightDetails(Long flightId)
+    public Mono<FlightDetailsDTO> getFlightDetails(Long flightId, String token)
     {
         var url = userServiceUrl.concat("/flights/{id}");
 
         return webClient.get()
                 .uri(url, flightId)
+                .headers(httpHeaders -> httpHeaders.setBearerAuth(token))
                 .retrieve()
                 .bodyToMono(FlightResponse.class)
                 .flatMap(flightResponse -> Mono.just(flightResponse.getFlightDetailsDTO()))

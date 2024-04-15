@@ -1,11 +1,17 @@
 package com.hcl.bookingservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class FlightResponse
 {
-    private final FlightDetailsDTO flightDetailsDTO;
+    @JsonProperty("data")
+    private FlightDetailsDTO flightDetailsDTO;
 
+    public FlightResponse()
+    {
+    }
 
     public FlightResponse(FlightDetailsDTO flightDetailsDTO)
     {
@@ -15,6 +21,11 @@ public class FlightResponse
     public FlightDetailsDTO getFlightDetailsDTO()
     {
         return flightDetailsDTO;
+    }
+
+    public void setFlightDetailsDTO(FlightDetailsDTO flightDetailsDTO)
+    {
+        this.flightDetailsDTO = flightDetailsDTO;
     }
 
     @Override

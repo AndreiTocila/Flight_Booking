@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 public interface BookingService
 {
-    Mono<Booking> saveBooking(BookingDTO bookingDTO);
+    Mono<Booking> saveBooking(BookingDTO bookingDTO, String token);
 
     void updateBookingAfterAdminValidation(ConsumerRecord<Long, GenericRecord> record);
 

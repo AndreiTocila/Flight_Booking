@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface UserServiceRestClient
 {
-    Mono<FlightDetailsDTO> getFlightDetails(Long flightId);
+    Mono<FlightDetailsDTO> getFlightDetails(Long flightId, String token);
 
     Mono<CardDetailsDTO> getCardDetails(Long cardId);
 }

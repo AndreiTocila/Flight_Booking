@@ -33,7 +33,7 @@ public class BookingServiceImpl implements BookingService
     }
 
     @Override
-    public Mono<Booking> saveBooking(BookingDTO bookingDTO)
+    public Mono<Booking> saveBooking(BookingDTO bookingDTO, String token)
     {
         Booking booking = new Booking();
         booking.setId(null);
@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService
         booking.setUserId("testUserId");
         booking.setExpirationDate(LocalDateTime.now().plusMinutes(15L));
 
-        Mono<FlightDetailsDTO> flightDetailsDTOMono = userServiceRestClient.getFlightDetails(bookingDTO.getFlightId());
+        Mono<FlightDetailsDTO> flightDetailsDTOMono = userServiceRestClient.getFlightDetails(bookingDTO.getFlightId(), token);
         Mono<CardDetailsDTO> cardDetailsDTOMono = userServiceRestClient.getCardDetails(bookingDTO.getCardDetailsId());
 
         return Mono.zip(flightDetailsDTOMono, cardDetailsDTOMono)
