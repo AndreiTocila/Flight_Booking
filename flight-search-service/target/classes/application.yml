@@ -8,3 +8,11 @@ spring:
       time: iso
   application:
     name: flight-search-service
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info,prometheus'
+

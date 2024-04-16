@@ -8,9 +8,11 @@ spring:
       time: iso
   application:
     name: flight-search-service
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
 
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info,prometheus'
 

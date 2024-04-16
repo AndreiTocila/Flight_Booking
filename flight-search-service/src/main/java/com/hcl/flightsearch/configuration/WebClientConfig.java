@@ -1,5 +1,17 @@
 package com.hcl.flightsearch.configuration;
 
-public class WebClientConfig {
-    // TODO: 4/5/2024  
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Configuration
+@EnableWebFlux
+public class WebClientConfig implements WebFluxConfigurer {
+    @Bean
+    public WebClient webClient(WebClient.Builder builder)
+    {
+        return builder.build();
+    }
 }

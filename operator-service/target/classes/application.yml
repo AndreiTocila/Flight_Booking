@@ -10,15 +10,15 @@ spring:
     name: operator-service
   data:
     mongodb:
-      uri: mongodb://mongodb:27017/operatordb
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+      uri: mongodb://flight-search-db:27017/flightsearchdb
+      port: 27017
+      database: flightsearch
 
-logging:
-  level:
-    com.netflix.discovery: DEBUG
-    org.springframework.cloud: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info,prometheus'
 
 

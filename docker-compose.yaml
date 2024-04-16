@@ -1,16 +1,6 @@
 version: '3'
 services:
 
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb-data:/data/db
-    networks:
-      - project
-
 #  keycloak:
 #    image: quay.io/keycloak/keycloak:latest
 #    container_name: keycloak
@@ -24,13 +14,6 @@ services:
 #    command:
 #      - start-dev
 #
-#  zookeeper:
-#    image: confluentinc/cp-zookeeper:latest
-#    container_name: zookeeper
-#    networks:
-#      project:
-#    environment:
-#      ZOOKEEPER_CLIENT_PORT: 2181
 #
 #  kafka1:
 #    image: confluentinc/cp-kafka:latest
@@ -98,21 +81,7 @@ services:
 #      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
 #      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092, kafka2:9092, kafka3:9092
 #      SCHEMA_REGISTRY_DEBUG: 'true'
-#
-#  kafka-ui:
-#    image: provectuslabs/kafka-ui:latest
-#    container_name: kafka-ui
-#    networks:
-#      project:
-#    depends_on:
-#      - kafka1
-#    ports:
-#      - 8090:8080
-#    environment:
-#      KAFKA_CLUSTERS_0_NAME: local
-#      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092, kafka2:9092, kafka3:9092
-#      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-#
+
 #  postgres-db:
 #    image: postgres
 #    container_name: postgres-db
@@ -127,28 +96,86 @@ services:
 #      - POSTGRES_PASSWORD=postgres
 #      - POSTGRES_DB=postgres
 
-  eureka-server:
-    build:
-      context: .
-      dockerfile: eureka-service/Dockerfile
-    container_name: eureka-server
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    networks:
+      project:
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka4:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka4
+    networks:
+      project:
     ports:
-      - "8761:8761"
+      - "8100:8100"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 4
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8100,PLAINTEXT://kafka4:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    networks:
+      project:
+    depends_on:
+      - kafka4
+    ports:
+      - 8090:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka4:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+
+  flight-search-db:
+    image: mongo:latest
+    container_name: flight-search-db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: FlightSearch
+    volumes:
+      - flight-search-service-db-data:/data/db
     networks:
       - project
+    restart: unless-stopped
 
   flight-search:
     build:
       context: .
       dockerfile: flight-search-service/Dockerfile
     container_name: flight-search
-    depends_on:
-      - eureka-server
     environment:
+      - MONGO_URI=mongodb://flight-search-db:27017/FlightSearch
       - SPRING_PROFILES_ACTIVE=prod
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - OPERATOR_LUFTHANSA_URI=http://operator-lufthansa:8080
+      - OPERATOR_WIZZAIR_URI=http://operator-wizzair:8080
+      - OPERATOR_RYANAIR_URI=http://operator-ryanair:8080
     ports:
       - "7070:8080"
+    networks:
+      - project
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: notification-service
+    depends_on:
+      - kafka4
+      - zookeeper
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KAFKA_BOOTSTRAP_SERVERS: kafka4:9092
+    ports:
+      - "8020:8080"
     networks:
       - project
 
@@ -159,14 +186,12 @@ services:
       dockerfile: operator-service/Dockerfile
     container_name: operator-lufthansa
     depends_on:
-      - mongodb
-      - eureka-server
+      - flight-search-db
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - OPERATOR_NAME=Lufthansa
       - SPRING_APPLICATION_NAME=operator-lufthansa
-      - spring.data.mongodb.uri=mongodb://mongodb:27017/operatordb
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
     ports:
       - "8051:8080"
     networks:
@@ -178,14 +203,12 @@ services:
       dockerfile: operator-service/Dockerfile
     container_name: operator-wizzair
     depends_on:
-      - mongodb
-      - eureka-server
+      - flight-search-db
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - OPERATOR_NAME=WizzAir
       - SPRING_APPLICATION_NAME=operator-wizzair
-      - spring.data.mongodb.uri=mongodb://mongodb:27017/operatordb
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
     ports:
       - "8052:8080"
     networks:
@@ -197,24 +220,54 @@ services:
       dockerfile: operator-service/Dockerfile
     container_name: operator-ryanair
     depends_on:
-      - mongodb
-      - eureka-server
+      - flight-search-db
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - OPERATOR_NAME=RyanAir
       - SPRING_APPLICATION_NAME=operator-ryanair
-      - spring.data.mongodb.uri=mongodb://mongodb:27017/operatordb
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
     ports:
       - "8053:8080"
     networks:
       - project
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - notification-service
+      - flight-search
+      - operator-lufthansa
+      - operator-wizzair
+      - operator-ryanair
+    networks:
+      - project
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: 'admin'
+    networks:
+      - project
+
 
 
 networks:
   project:
 
 volumes:
-  mongodb-data:
+  flight-search-service-db-data:
     driver: local
-  postgres-db-data:
+  grafana_data:
+    driver: local

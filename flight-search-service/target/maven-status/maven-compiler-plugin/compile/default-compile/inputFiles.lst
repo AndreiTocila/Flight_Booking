@@ -1,7 +1,9 @@
 C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\model\Flight.java
 C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\model\SearchCriteria.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\dto\SearchCriteriaDTO.java
 C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\configuration\WebClientConfig.java
 C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\service\client\OperatorServiceClient.java
 C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\service\FlightSearchService.java
 C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\FlightSearchApplication.java
 C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\controller\FlightSearchController.java
+C:\stuff\Projects\Work\Flight_Booking\flight-search-service\src\main\java\com\hcl\flightsearch\dto\FlightDTO.java

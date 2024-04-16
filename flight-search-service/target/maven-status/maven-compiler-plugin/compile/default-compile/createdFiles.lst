@@ -3,5 +3,7 @@ com\hcl\flightsearch\model\Flight.class
 com\hcl\flightsearch\controller\FlightSearchController.class
 com\hcl\flightsearch\FlightSearchApplication.class
 com\hcl\flightsearch\service\client\OperatorServiceClient.class
+com\hcl\flightsearch\dto\FlightDTO.class
+com\hcl\flightsearch\dto\SearchCriteriaDTO.class
 com\hcl\flightsearch\model\SearchCriteria.class
 com\hcl\flightsearch\service\FlightSearchService.class
