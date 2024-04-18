@@ -1,14 +1,10 @@
 package com.hcl.bookingservice.integration.kafka;
 
-import com.hcl.bookingservice.integration.config.KafkaIntegrationTestConfig;
 import com.hcl.kafka.dto.SeatReservationDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
@@ -20,7 +16,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -62,10 +57,10 @@ public class AdminKafkaTest
     private KafkaTemplate<Long, SeatReservationDTO> adminKafkaTemplate;
 
     @Test
-    public void testKafkaIsUp() throws ExecutionException, InterruptedException
+    public void testAdminKafkaProducer() throws InterruptedException
     {
         SeatReservationDTO reservationDTO = new SeatReservationDTO();
-        reservationDTO.setId("bookingId");
+        reservationDTO.setBookingId("bookingId");
         reservationDTO.setNumberOfSeats(5);
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -80,5 +75,11 @@ public class AdminKafkaTest
                 });
 
         assertTrue(latch.await(10, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testAdminFeedbackConsumer()
+    {
+
     }
 }

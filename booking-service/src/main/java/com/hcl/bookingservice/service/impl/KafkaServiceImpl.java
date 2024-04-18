@@ -81,10 +81,10 @@ public class KafkaServiceImpl implements KafkaService
         }
     }
 
-    private void sendAdminMessage(Long flightId, String bookingId, Integer numberOfSeats)
+    private void sendAdminMessage(Long flightId, String bookingId, Long numberOfSeats)
     {
         SeatReservationDTO reservationDTO = new SeatReservationDTO();
-        reservationDTO.setId(bookingId);
+        reservationDTO.setBookingId(bookingId);
         reservationDTO.setNumberOfSeats(numberOfSeats);
         adminKafkaTemplate.send("seat_reservation", flightId, reservationDTO)
                 .whenComplete((result, exception) ->
@@ -144,7 +144,7 @@ public class KafkaServiceImpl implements KafkaService
     {
         StringBuilder sb = new StringBuilder();
         sb
-                .append("Flight from")
+                .append("Flight from ")
                 .append(departure)
                 .append(" to ")
                 .append(arrival)

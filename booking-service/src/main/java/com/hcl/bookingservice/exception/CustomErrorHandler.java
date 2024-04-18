@@ -2,6 +2,7 @@ package com.hcl.bookingservice.exception;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.RecordDeserializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,8 @@ public class CustomErrorHandler extends DefaultErrorHandler
     @Override
     public boolean handleOne(Exception thrownException, ConsumerRecord<?, ?> record, Consumer<?, ?> consumer, MessageListenerContainer container)
     {
-        return super.handleOne(thrownException, record, consumer, container);
+        handle(thrownException, consumer, record);
+        return true;
     }
 
     @Override
@@ -38,13 +40,23 @@ public class CustomErrorHandler extends DefaultErrorHandler
         super.handleOtherException(thrownException, consumer, container, batchListener);
     }
 
-    void handle(Exception exception, Consumer<?, ?> consumer) {
+    private void handle(Exception exception, Consumer<?, ?> consumer)
+    {
         logger.error("Exception thrown", exception);
-        if (exception instanceof RecordDeserializationException ex) {
+        if (exception instanceof RecordDeserializationException ex)
+        {
             consumer.seek(ex.topicPartition(), ex.offset() + 1L);
             consumer.commitSync();
-        } else {
+        } else
+        {
             logger.error("Exception not handled", exception);
         }
+    }
+
+    private void handle(Exception exception, Consumer<?, ?> consumer, ConsumerRecord<?, ?> record)
+    {
+        logger.error("Exception thrown", exception);
+        consumer.seek(new TopicPartition(record.topic(), record.partition()),record.offset() + 1L);
+        logger.info("Record moved to DLT");
     }
 }

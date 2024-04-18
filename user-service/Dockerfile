@@ -1,4 +1,20 @@
-FROM ubuntu:latest
-LABEL authors="alex"
+#FROM maven:3.8.3-openjdk-17 AS build
+#RUN mkdir /project
+#COPY . /project
+#WORKDIR /project
+#RUN mvn clean compile package -f user-service -DskipTests
+#
+#FROM openjdk:17.0.2-slim
+#RUN apt-get update -y && apt-get install -y dumb-init && apt-get install -y curl
+#RUN mkdir /app
+#RUN useradd javauser && groupadd javausergroup && usermod -a -G javausergroup javauser
+#COPY --from=build /project/user-service/target/user-service-*-SNAPSHOT.jar /app/user-service.jar
+#WORKDIR /app
+#RUN chown -R javauser:javausergroup /app
+#USER javauser
+#EXPOSE 9001
+#CMD "dumb-init" "java" "-jar" "user-service.jar"
 
-ENTRYPOINT ["top", "-b"]
+FROM eclipse-temurin:17
+COPY target/*.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
