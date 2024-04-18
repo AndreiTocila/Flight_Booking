@@ -1,7 +1,10 @@
-C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\config\KafkaConfig.java
-C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\controller\MockPaymentController.java
-C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\controller\MockUserController.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\kafka\dto\NotificationDTO.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\config\KafkaProducerConfig.java
 C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\NotificationApplication.java
-C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\controller\MockBookingController.java
-C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\kafka\MessageProducer.java
-C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\kafka\MessageListener.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\config\KafkaConsumerConfig.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\model\Notification.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\kafka\listener\NotificationListener.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\repository\NotificationRepository.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\service\NotificationService.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\controller\NotificationController.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\kafka\producer\MockNotificationProducer.java

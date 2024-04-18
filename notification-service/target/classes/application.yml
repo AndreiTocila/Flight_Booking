@@ -8,8 +8,15 @@ spring:
       time: iso
   application:
     name: notification-service
+  data:
+    mongodb:
+      uri: mongodb://notification-db:27018/notificationService
+      port: 27018
+      database: notification
   kafka:
-    bootstrap-servers: localhost:8100
+    bootstrap-servers: kafka1:9092,kafka2:9092,kafka3:9092
+    properties:
+      schema.registry.url: "http://schema-registry:8081"
     consumer:
       group-id: notification-group
       auto-offset-reset: earliest
