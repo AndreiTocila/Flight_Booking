@@ -27,7 +27,6 @@ public class FlightsController {
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @GetMapping("/{flightNumber}")
   public ResponseEntity<FlightResponse> getFlight(@PathVariable Long flightNumber) {
-    kafkaService.sendFlightDetails(flightsService.getFlightByNumber(flightNumber));
     return ResponseEntity.ok(flightsService.getFlightByNumber(flightNumber));
   }
 }

@@ -144,7 +144,7 @@ public class KafkaServiceImpl implements KafkaService
     {
         StringBuilder sb = new StringBuilder();
         sb
-                .append("Flight from")
+                .append("Flight from ")
                 .append(departure)
                 .append(" to ")
                 .append(arrival)

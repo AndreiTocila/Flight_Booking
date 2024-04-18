@@ -65,32 +65,6 @@ public class KafkaConsumerConfig
         return errorHandler;
     }
 
-//    @Bean
-//    public ConsumerFactory<String, String> adminConsumerFactory()
-//    {
-//        Map<String, Object> props = new HashMap<>();
-//        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-//        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-//        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-////        props.put(KafkaAvroDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
-////        props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
-//        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-//
-//        return new DefaultKafkaConsumerFactory<>(props);
-//    }
-//
-//    @Bean
-//    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> adminContainerFactory(ConsumerFactory<String, String> adminConsumerFactory)
-//    {
-//        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-//
-//        factory.setConsumerFactory(adminConsumerFactory);
-//        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
-//        factory.setCommonErrorHandler(defaultErrorHandler());
-//
-//        return factory;
-//    }
-
     @Bean
     public ConsumerFactory<Long, GenericRecord> consumerFactory()
     {

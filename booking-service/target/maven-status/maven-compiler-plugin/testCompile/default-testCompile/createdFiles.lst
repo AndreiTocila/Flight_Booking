@@ -1,3 +1,0 @@
-com\hcl\bookingservice\BookingServiceApplicationTests.class
-com\hcl\bookingservice\integration\kafka\AdminKafkaTest.class
-com\hcl\bookingservice\integration\config\KafkaIntegrationTestConfig.class

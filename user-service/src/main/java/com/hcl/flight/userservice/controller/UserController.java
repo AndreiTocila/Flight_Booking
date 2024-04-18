@@ -21,9 +21,9 @@ public class UserController {
     return userService.findById(id).get();
   }
 
-  @GetMapping("/{email}")
+  @GetMapping("")
   @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_USER')")
-  public ResponseEntity<String> getIban(@PathVariable String email) {
+  public ResponseEntity<String> getIban(@RequestParam String email) {
     return ResponseEntity.ok(userService.getIban(email));
   }
 }
