@@ -1,4 +1,4 @@
-version: '3'
+version: '3.6'
 services:
 
   flight-book-database:
@@ -54,14 +54,21 @@ services:
     networks:
       flight-book-network:
     depends_on:
+      - keycloak
       - flight-book-database
       - schema-registry
       - kafka1
+      - keycloakdb
     environment:
       - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/spring-app
+      - keycloak.auth-server-url=http://keycloak:8080/
       - spring.datasource.url=jdbc:postgresql://flight-book-database:5432/postgres?useSSL=false
       - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
       - schema.registry.url=http://schema-registry:8081
+    volumes:
+      - ./keycloak.json:/keycloak.json
+
+
 
   booking-service:
     build:
@@ -135,10 +142,41 @@ services:
     ports:
       - "8080:8080"
     environment:
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloakdb:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+
+      KC_LOG_LEVEL: info
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     command:
       - start-dev
+    depends_on:
+      - keycloakdb
+
+
+  keycloakdb:
+    image: postgres:16
+    restart: always
+    networks:
+      flight-book-network:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -239,6 +277,7 @@ volumes:
   flight_book:
   booking-service-db-data:
   payment-service-db-data:
+  postgres_data:
 
 networks:
   flight-book-network:
