@@ -1,0 +1,15 @@
+{
+  "namespace": "com.hcl.kafka.dto",
+  "name": "NotificationDTO",
+  "type": "record",
+  "fields": [
+    {
+      "name": "userEmail",
+      "type": "string"
+    },
+    {
+      "name": "notificationMessage",
+      "type": "string"
+    }
+  ]
+}

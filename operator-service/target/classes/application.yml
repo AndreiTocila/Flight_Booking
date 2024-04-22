@@ -1,0 +1,24 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    format:
+      date: iso
+      date-time: iso
+      time: iso
+  application:
+    name: operator-service
+  data:
+    mongodb:
+      uri: mongodb://flight-search-db:27017/flightsearchdb
+      port: 27017
+      database: flightsearch
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info,prometheus'
+
+

@@ -274,11 +274,59 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
     restart: unless-stopped
 
+  notification-db:
+    image: mongo:latest
+    container_name: notification-db
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_DATABASE: notificationService
+    volumes:
+      - notification-db-data:/data/db
+    networks:
+      - project
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - notification-service
+    #      - flight-search
+    #      - operator-lufthansa
+    #      - operator-wizzair
+    #      - operator-ryanair
+    networks:
+      - project
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: 'admin'
+    networks:
+      - project
+
 volumes:
   flight_book:
   booking-service-db-data:
   payment-service-db-data:
+  notification-db-data:
   postgres_data:
+  grafana_data:
+    driver: local
+  prometheus_data:
+    driver: local
 
 networks:
   flight-book-network:

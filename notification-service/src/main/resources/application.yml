@@ -1,0 +1,47 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    format:
+      date: iso
+      date-time: iso
+      time: iso
+  application:
+    name: notification-service
+  data:
+    mongodb:
+      uri: mongodb://notification-db:27017/notificationService
+      port: 27018
+      database: notification
+  kafka:
+    bootstrap-servers: kafka1:9092,kafka2:9092,kafka3:9092
+    properties:
+      schema.registry.url: "http://schema-registry:8081"
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: porumbmihai20@stud.ase.ro
+    password: xwzl zeci odng kulc
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info,prometheus'
+

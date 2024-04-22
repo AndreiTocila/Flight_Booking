@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'spring-applications'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [
+        'notification-service:8020',
+        'flight-search:7070',
+        'operator-lufthansa:8051',
+        'operator-wizzair:8052',
+        'operator-ryanair:8053'
+      ]
+
