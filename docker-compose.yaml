@@ -91,18 +91,18 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092, kafka2:9092, kafka3:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
-  flight-search-db:
-    image: mongo:latest
-    container_name: flight-search-db
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_DATABASE: FlightSearch
-    volumes:
-      - flight-search-service-db-data:/data/db
-    networks:
-      - project
-    restart: unless-stopped
+#  flight-search-db:
+#    image: mongo:latest
+#    container_name: flight-search-db
+#    ports:
+#      - "27017:27017"
+#    environment:
+#      MONGO_INITDB_DATABASE: FlightSearch
+#    volumes:
+#      - flight-search-service-db-data:/data/db
+#    networks:
+#      - project
+#    restart: unless-stopped
 
   notification-db:
     image: mongo:latest
@@ -116,21 +116,21 @@ services:
     networks:
       - project
 
-  flight-search:
-    build:
-      context: .
-      dockerfile: flight-search-service/Dockerfile
-    container_name: flight-search
-    environment:
-      - MONGO_URI=mongodb://flight-search-db:27017/FlightSearch
-      - SPRING_PROFILES_ACTIVE=prod
-      - OPERATOR_LUFTHANSA_URI=http://operator-lufthansa:8080
-      - OPERATOR_WIZZAIR_URI=http://operator-wizzair:8080
-      - OPERATOR_RYANAIR_URI=http://operator-ryanair:8080
-    ports:
-      - "7070:8080"
-    networks:
-      - project
+#  flight-search:
+#    build:
+#      context: .
+#      dockerfile: flight-search-service/Dockerfile
+#    container_name: flight-search
+#    environment:
+#      - MONGO_URI=mongodb://flight-search-db:27017/FlightSearch
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - OPERATOR_LUFTHANSA_URI=http://operator-lufthansa:8080
+#      - OPERATOR_WIZZAIR_URI=http://operator-wizzair:8080
+#      - OPERATOR_RYANAIR_URI=http://operator-ryanair:8080
+#    ports:
+#      - "7070:8080"
+#    networks:
+#      - project
 
   notification-service:
     build:
@@ -152,70 +152,71 @@ services:
       - project
 
 
-  operator-lufthansa:
-    build:
-      context: .
-      dockerfile: operator-service/Dockerfile
-    container_name: operator-lufthansa
-    depends_on:
-      - flight-search-db
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - OPERATOR_NAME=Lufthansa
-      - SPRING_APPLICATION_NAME=operator-lufthansa
-      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
-    ports:
-      - "8051:8080"
-    networks:
-      - project
-
-  operator-wizzair:
-    build:
-      context: .
-      dockerfile: operator-service/Dockerfile
-    container_name: operator-wizzair
-    depends_on:
-      - flight-search-db
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - OPERATOR_NAME=WizzAir
-      - SPRING_APPLICATION_NAME=operator-wizzair
-      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
-    ports:
-      - "8052:8080"
-    networks:
-      - project
-
-  operator-ryanair:
-    build:
-      context: .
-      dockerfile: operator-service/Dockerfile
-    container_name: operator-ryanair
-    depends_on:
-      - flight-search-db
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - OPERATOR_NAME=RyanAir
-      - SPRING_APPLICATION_NAME=operator-ryanair
-      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
-    ports:
-      - "8053:8080"
-    networks:
-      - project
+#  operator-lufthansa:
+#    build:
+#      context: .
+#      dockerfile: operator-service/Dockerfile
+#    container_name: operator-lufthansa
+#    depends_on:
+#      - flight-search-db
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - OPERATOR_NAME=Lufthansa
+#      - SPRING_APPLICATION_NAME=operator-lufthansa
+#      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
+#    ports:
+#      - "8051:8080"
+#    networks:
+#      - project
+#
+#  operator-wizzair:
+#    build:
+#      context: .
+#      dockerfile: operator-service/Dockerfile
+#    container_name: operator-wizzair
+#    depends_on:
+#      - flight-search-db
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - OPERATOR_NAME=WizzAir
+#      - SPRING_APPLICATION_NAME=operator-wizzair
+#      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
+#    ports:
+#      - "8052:8080"
+#    networks:
+#      - project
+#
+#  operator-ryanair:
+#    build:
+#      context: .
+#      dockerfile: operator-service/Dockerfile
+#    container_name: operator-ryanair
+#    depends_on:
+#      - flight-search-db
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - OPERATOR_NAME=RyanAir
+#      - SPRING_APPLICATION_NAME=operator-ryanair
+#      - spring.data.mongodb.uri=mongodb://flight-search-db:27017/flightsearchdb
+#    ports:
+#      - "8053:8080"
+#    networks:
+#      - project
 
   prometheus:
     image: prom/prometheus
     container_name: prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     ports:
       - "9090:9090"
     depends_on:
       - notification-service
-      - flight-search
-      - operator-lufthansa
-      - operator-wizzair
-      - operator-ryanair
+#      - flight-search
+#      - operator-lufthansa
+#      - operator-wizzair
+#      - operator-ryanair
     networks:
       - project
 
@@ -239,7 +240,9 @@ networks:
   project:
 
 volumes:
-  flight-search-service-db-data:
+#  flight-search-service-db-data:
   notification-db-data:
   grafana_data:
+    driver: local
+  prometheus_data:
     driver: local

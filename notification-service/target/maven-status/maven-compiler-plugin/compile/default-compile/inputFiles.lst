@@ -1,5 +1,7 @@
 C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\kafka\dto\NotificationDTO.java
 C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\config\KafkaProducerConfig.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\config\MailConfig.java
+C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\model\NotificationPOJO.java
 C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\NotificationApplication.java
 C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\config\KafkaConsumerConfig.java
 C:\stuff\Projects\Work\Flight_Booking\notification-service\src\main\java\com\hcl\notification\model\Notification.java
