@@ -44,50 +44,50 @@ services:
   #    expose:
   #      - "9001"
 
-  user-service:
-    build:
-      context: ./user-service
-      dockerfile: Dockerfile
-    container_name: user-service
-    ports:
-      - "9001:9001"
-    networks:
-      flight-book-network:
-    depends_on:
-      - keycloak
-      - flight-book-database
-      - schema-registry
-      - kafka1
-      - keycloakdb
-    environment:
-      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/spring-app
-      - keycloak.auth-server-url=http://keycloak:8080/
-      - spring.datasource.url=jdbc:postgresql://flight-book-database:5432/postgres?useSSL=false
-      - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
-      - schema.registry.url=http://schema-registry:8081
-    volumes:
-      - ./keycloak.json:/keycloak.json
+#  user-service:
+#    build:
+#      context: ./user-service
+#      dockerfile: Dockerfile
+#    container_name: user-service
+#    ports:
+#      - "9001:9001"
+#    networks:
+#      flight-book-network:
+#    depends_on:
+#      - keycloak
+#      - flight-book-database
+#      - schema-registry
+#      - kafka1
+#      - keycloakdb
+#    environment:
+#      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/spring-app
+#      - keycloak.auth-server-url=http://keycloak:8080/
+#      - spring.datasource.url=jdbc:postgresql://flight-book-database:5432/postgres?useSSL=false
+#      - kafka.bootstrap-servers=kafka1:9092
+#      - schema.registry.url=http://schema-registry:8081
+#    volumes:
+#      - ./keycloak.json:/keycloak.json
 
 
 
-  booking-service:
-    build:
-      context: ./booking-service
-      dockerfile: Dockerfile
-    container_name: booking-service
-    ports:
-      - "9090:9090"
-    networks:
-      flight-book-network:
-    depends_on:
-      - booking-service-db
-      - schema-registry
-      - kafka1
-    environment:
-      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/spring-app
-      - spring.data.mongodb.uri=mongodb://booking-service-db:27017/Bookings
-      - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
-      - schema.registry.url=http://schema-registry:8081
+#  booking-service:
+#    build:
+#      context: ./booking-service
+#      dockerfile: Dockerfile
+#    container_name: booking-service
+#    ports:
+#      - "9090:9090"
+#    networks:
+#      flight-book-network:
+#    depends_on:
+#      - booking-service-db
+#      - schema-registry
+#      - kafka1
+#    environment:
+#      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/spring-app
+#      - spring.data.mongodb.uri=mongodb://booking-service-db:27017/Bookings
+#      - kafka.bootstrap-servers=kafka1:9092
+#      - schema.registry.url=http://schema-registry:8081
 
   payment-service:
     build:
@@ -103,9 +103,9 @@ services:
       - schema-registry
       - kafka1
     environment:
-      - spring.data.mongodb.uri=mongodb://payment-service-db:27017/paypal
-      - spring.kafka.consumer.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
-      - spring.kafka.producer.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+      - spring.data.mongodb.uri=mongodb://payment-service-db:27018/paypal
+      - spring.kafka.consumer.bootstrap-servers=kafka1:9092
+      - spring.kafka.producer.bootstrap-servers=kafka1:9092
       - spring.kafka.consumer.properties.schema.registry.url=http://schema-registry:8081
       - spring.kafka.producer.properties.schema.registry.url=http://schema-registry:8081
 
@@ -205,39 +205,39 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
     restart: unless-stopped
 
-  kafka2:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka2
-    networks:
-      flight-book-network:
-    ports:
-      - "8098:8098"
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8098,PLAINTEXT://kafka2:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-    restart: unless-stopped
-
-  kafka3:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka3
-    networks:
-      flight-book-network:
-    ports:
-      - "8099:8099"
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8099,PLAINTEXT://kafka3:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-    restart: unless-stopped
+  #  kafka2:
+  #    image: confluentinc/cp-kafka:latest
+  #    container_name: kafka2
+  #    networks:
+  #      flight-book-network:
+  #    ports:
+  #      - "8098:8098"
+  #    depends_on:
+  #      - zookeeper
+  #    environment:
+  #      KAFKA_BROKER_ID: 2
+  #      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
+  #      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8098,PLAINTEXT://kafka2:9092
+  #      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #    restart: unless-stopped
+  #
+  #  kafka3:
+  #    image: confluentinc/cp-kafka:latest
+  #    container_name: kafka3
+  #    networks:
+  #      flight-book-network:
+  #    ports:
+  #      - "8099:8099"
+  #    depends_on:
+  #      - zookeeper
+  #    environment:
+  #      KAFKA_BROKER_ID: 3
+  #      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
+  #      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8099,PLAINTEXT://kafka3:9092
+  #      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #    restart: unless-stopped
 
   schema-registry:
     image: confluentinc/cp-schema-registry:latest
@@ -250,29 +250,27 @@ services:
     depends_on:
       - zookeeper
       - kafka1
-      - kafka2
-      - kafka3
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
       SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092, kafka2:9092, kafka3:9092
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092
       SCHEMA_REGISTRY_DEBUG: 'true'
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
-    networks:
-      flight-book-network:
-    depends_on:
-      - kafka1
-    ports:
-      - 8090:8080
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092, kafka2:9092, kafka3:9092
-      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-    restart: unless-stopped
+#  kafka-ui:
+#    image: provectuslabs/kafka-ui:latest
+#    container_name: kafka-ui
+#    networks:
+#      flight-book-network:
+#    depends_on:
+#      - kafka1
+#    ports:
+#      - 8090:8080
+#    environment:
+#      KAFKA_CLUSTERS_0_NAME: local
+#      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092, kafka2:9092, kafka3:9092
+#      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+#    restart: unless-stopped
 
 volumes:
   flight_book:

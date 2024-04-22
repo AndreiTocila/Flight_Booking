@@ -1,15 +1,15 @@
 {
   "namespace": "com.hcl.kafka.dto",
-  "name": "AdminFeedback",
+  "name": "NotificationDTO",
   "type": "record",
   "fields": [
     {
-      "name": "bookingId",
+      "name": "userEmail",
       "type": "string"
     },
     {
-      "name": "statusValidation",
-      "type": "boolean"
+      "name": "notificationMessage",
+      "type": "string"
     }
   ]
 }

@@ -16,7 +16,7 @@ public class Booking
     private FlightDetailsDTO flight;
     private CardDetailsDTO cardDetails;
     private Long numberOfSeats;
-    private String email;
+    private String userEmail;
     private String status;
     private LocalDateTime expirationDate;
 
@@ -24,13 +24,13 @@ public class Booking
     {
     }
 
-    public Booking(String id, FlightDetailsDTO flight, CardDetailsDTO cardDetails, Long numberOfSeats, String email, String status, LocalDateTime expirationDate)
+    public Booking(String id, FlightDetailsDTO flight, CardDetailsDTO cardDetails, Long numberOfSeats, String userEmail, String status, LocalDateTime expirationDate)
     {
         this.id = id;
         this.flight = flight;
         this.cardDetails = cardDetails;
         this.numberOfSeats = numberOfSeats;
-        this.email = email;
+        this.userEmail = userEmail;
         this.status = status;
         this.expirationDate = expirationDate;
     }
@@ -75,14 +75,14 @@ public class Booking
         this.numberOfSeats = numberOfSeats;
     }
 
-    public String getEmail()
+    public String getUserEmail()
     {
-        return email;
+        return userEmail;
     }
 
-    public void setEmail(String email)
+    public void setUserEmail(String email)
     {
-        this.email = email;
+        this.userEmail = email;
     }
 
     public String getStatus()
@@ -117,13 +117,13 @@ public class Booking
             return false;
         }
         Booking booking = (Booking) o;
-        return Objects.equals(id, booking.id) && Objects.equals(flight, booking.flight) && Objects.equals(cardDetails, booking.cardDetails) && Objects.equals(numberOfSeats, booking.numberOfSeats) && Objects.equals(email, booking.email) && Objects.equals(status, booking.status) && Objects.equals(expirationDate, booking.expirationDate);
+        return Objects.equals(id, booking.id) && Objects.equals(flight, booking.flight) && Objects.equals(cardDetails, booking.cardDetails) && Objects.equals(numberOfSeats, booking.numberOfSeats) && Objects.equals(userEmail, booking.userEmail) && Objects.equals(status, booking.status) && Objects.equals(expirationDate, booking.expirationDate);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, flight, cardDetails, numberOfSeats, email, status, expirationDate);
+        return Objects.hash(id, flight, cardDetails, numberOfSeats, userEmail, status, expirationDate);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class Booking
                 ", flight=" + flight +
                 ", cardDetails=" + cardDetails +
                 ", numberOfSeats=" + numberOfSeats +
-                ", userId='" + email + '\'' +
+                ", userId='" + userEmail + '\'' +
                 ", status='" + status + '\'' +
                 ", expirationDate=" + expirationDate +
                 '}';
