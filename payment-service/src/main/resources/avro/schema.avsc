@@ -1,0 +1,32 @@
+{
+  "namespace": "com.project.paypal.utils",
+  "type": "record",
+  "name": "PaymentMessage",
+  "fields": [
+    {
+      "name": "total",
+      "type": "double",
+      "default": 1.0
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "method",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "intent",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": ""
+    }
+  ]
+}

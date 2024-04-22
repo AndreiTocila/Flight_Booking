@@ -1,0 +1,35 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+                   logicalFilePath="config/liquibase/changelogs/phase1/changesets/create_flight_table.xml">
+
+    <changeSet id="create_flight_table" author="Tomescu Alexandru">
+        <preConditions>
+            <sqlCheck expectedResult="1">
+                SELECT count(*) FROM information_schema.schemata WHERE schema_name = 'user_service';
+            </sqlCheck>
+            <not>
+                <tableExists schemaName="user_service" tableName="flights_operator"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="flights_sequence" schemaName="user_service" startValue="1"
+                        incrementBy="1"/>
+
+        <createTable tableName="flights_operator" schemaName="user_service">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="flights_pkey"/>
+            </column>
+            <column name="flight_number" type="int"/>
+            <column name="flight_name" type="VARCHAR(50)"/>
+            <column name="number_of_seats" type="int"/>
+            <column name="operator_id" type="bigint"/>
+            <column name="departure" type="VARCHAR(50)"/>
+            <column name="arrival" type="VARCHAR(50)"/>
+            <column name="price" type="int"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
