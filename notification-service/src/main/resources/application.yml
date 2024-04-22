@@ -10,13 +10,13 @@ spring:
     name: notification-service
   data:
     mongodb:
-      uri: mongodb://notification-db:27017/notificationService
-      port: 27018
+      uri: mongodb://localhost:27019/notificationService
+      port: 27019
       database: notification
   kafka:
-    bootstrap-servers: kafka1:9092,kafka2:9092,kafka3:9092
+    bootstrap-servers: localhost:8097,localhost:8098,localhost:8099
     properties:
-      schema.registry.url: "http://schema-registry:8081"
+      schema.registry.url: "http://localhost:8081"
     consumer:
       group-id: notification-group
       auto-offset-reset: earliest
@@ -39,9 +39,12 @@ spring:
             enable: true
 
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: 'health,info,prometheus'
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: 'health,info,prometheus'
+
+server:
+  port: 9095
 
