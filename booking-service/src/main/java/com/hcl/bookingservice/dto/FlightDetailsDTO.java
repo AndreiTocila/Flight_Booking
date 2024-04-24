@@ -1,7 +1,10 @@
 package com.hcl.bookingservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FlightDetailsDTO
 {
     private Long id;
@@ -12,19 +15,19 @@ public class FlightDetailsDTO
 
     private Double price;
 
-    private String iban;
+    private String ibanOperator;
 
     public FlightDetailsDTO()
     {
     }
 
-    public FlightDetailsDTO(Long id, String departure, String arrival, Double price, String iban)
+    public FlightDetailsDTO(Long id, String departure, String arrival, Double price, String ibanOperator)
     {
         this.id = id;
         this.departure = departure;
         this.arrival = arrival;
         this.price = price;
-        this.iban = iban;
+        this.ibanOperator = ibanOperator;
     }
 
     public Long getId()
@@ -67,14 +70,14 @@ public class FlightDetailsDTO
         this.price = price;
     }
 
-    public String getIban()
+    public String getIbanOperator()
     {
-        return iban;
+        return ibanOperator;
     }
 
-    public void setIban(String iban)
+    public void setIbanOperator(String ibanOperator)
     {
-        this.iban = iban;
+        this.ibanOperator = ibanOperator;
     }
 
     @Override
@@ -89,13 +92,13 @@ public class FlightDetailsDTO
             return false;
         }
         FlightDetailsDTO that = (FlightDetailsDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(departure, that.departure) && Objects.equals(arrival, that.arrival) && Objects.equals(price, that.price) && Objects.equals(iban, that.iban);
+        return Objects.equals(id, that.id) && Objects.equals(departure, that.departure) && Objects.equals(arrival, that.arrival) && Objects.equals(price, that.price) && Objects.equals(ibanOperator, that.ibanOperator);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, departure, arrival, price, iban);
+        return Objects.hash(id, departure, arrival, price, ibanOperator);
     }
 
     @Override
@@ -106,7 +109,7 @@ public class FlightDetailsDTO
                 ", departure='" + departure + '\'' +
                 ", arrival='" + arrival + '\'' +
                 ", price=" + price +
-                ", iban='" + iban + '\'' +
+                ", ibanOperator='" + ibanOperator + '\'' +
                 '}';
     }
 }

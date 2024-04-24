@@ -1,0 +1,44 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+                   logicalFilePath="config/liquibase/changelogs/phase1/changesets/create_user_table.xml">
+
+    <changeSet id="schema_creation_user_service" author="Tomescu Alexandru">
+        <sql>
+            DROP SCHEMA IF EXISTS user_service CASCADE;
+            CREATE SCHEMA user_service;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_user_table" author="Tomescu Alexandru">
+        <preConditions>
+            <sqlCheck expectedResult="1">
+                SELECT count(*) FROM information_schema.schemata WHERE schema_name = 'user_service';
+            </sqlCheck>
+            <not>
+                <tableExists schemaName="user_service" tableName="users"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="users_sequence" schemaName="user_service" startValue="1"
+                        incrementBy="1"/>
+
+        <createTable tableName="users" schemaName="user_service">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+            <column name="email" type="VARCHAR(50)">
+                <constraints unique="true" uniqueConstraintName="users_email_unique_constraint"/>
+            </column>
+            <column name="address" type="VARCHAR(100)"/>
+            <column name="phone_number" type="VARCHAR(100)"/>
+            <column name="iban" type="VARCHAR(100)"/>
+            <column name="role" type="varchar(50)"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

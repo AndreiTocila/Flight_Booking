@@ -4,28 +4,15 @@ import java.util.Objects;
 
 public class CardDetailsDTO
 {
-    private Long id;
-
     private String iban;
 
     public CardDetailsDTO()
     {
     }
 
-    public CardDetailsDTO(Long id, String iban)
+    public CardDetailsDTO(String iban)
     {
-        this.id = id;
         this.iban = iban;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
     }
 
     public String getIban()
@@ -50,21 +37,20 @@ public class CardDetailsDTO
             return false;
         }
         CardDetailsDTO that = (CardDetailsDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(iban, that.iban);
+        return Objects.equals(iban, that.iban);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, iban);
+        return Objects.hash(iban);
     }
 
     @Override
     public String toString()
     {
         return "CardDetailsDTO{" +
-                "id=" + id +
-                ", iban='" + iban + '\'' +
+                "iban='" + iban + '\'' +
                 '}';
     }
 }

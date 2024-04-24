@@ -10,6 +10,7 @@ import com.hcl.bookingservice.service.KafkaService;
 import com.hcl.bookingservice.service.UserServiceRestClient;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,26 +34,26 @@ public class BookingServiceImpl implements BookingService
     }
 
     @Override
-    public Mono<Booking> saveBooking(BookingDTO bookingDTO)
+    public Mono<Booking> saveBooking(BookingDTO bookingDTO, Jwt jwt)
     {
         Booking booking = new Booking();
         booking.setId(null);
         booking.setNumberOfSeats(bookingDTO.getNumberOfSeats());
         booking.setStatus("RESERVED");
-        booking.setUserId("testUserId");
+        booking.setUserEmail(jwt.getClaimAsString("email"));
         booking.setExpirationDate(LocalDateTime.now().plusMinutes(15L));
 
-        Mono<FlightDetailsDTO> flightDetailsDTOMono = userServiceRestClient.getFlightDetails(bookingDTO.getFlightId());
-        Mono<CardDetailsDTO> cardDetailsDTOMono = userServiceRestClient.getCardDetails(bookingDTO.getCardDetailsId());
+        Mono<FlightDetailsDTO> flightDetailsDTOMono = userServiceRestClient.getFlightDetails(bookingDTO.getFlightId(), jwt.getTokenValue());
+        Mono<String> ibanMono = userServiceRestClient.getCardDetails(bookingDTO.getCardDetailsId(), jwt);
 
-        return Mono.zip(flightDetailsDTOMono, cardDetailsDTOMono)
+        return Mono.zip(flightDetailsDTOMono, ibanMono)
                 .flatMap(tuple ->
                 {
                     FlightDetailsDTO flightDetails = tuple.getT1();
-                    CardDetailsDTO cardDetails = tuple.getT2();
+                    String iban = tuple.getT2();
 
                     booking.setFlight(flightDetails);
-                    booking.setCardDetails(cardDetails);
+                    booking.setCardDetails(new CardDetailsDTO(iban));
 
                     return bookingRepository.save(booking).doOnNext(kafkaService::sendAddBookingMessages);
                 })
@@ -90,7 +91,7 @@ public class BookingServiceImpl implements BookingService
                 {
                     Boolean validated = (Boolean) genericRecord.get("statusValidation");
                     String status = validated ? "ACCEPTED" : "REJECTED";
-                    kafkaService.sendAfterPaymentValidationMessages(booking, status);
+                    kafkaService.sendAfterPaymentValidationMessages(booking, status, validated);
 
                     booking.setStatus(status);
                     return bookingRepository.save(booking);

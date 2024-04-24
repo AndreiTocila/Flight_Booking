@@ -1,0 +1,68 @@
+server:
+  tomcat:
+    threads:
+      max: ${BPL_JVM_THREAD_COUNT:20}
+  servlet:
+    context-path: /userservice
+  port: 9001
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    format:
+      date: iso
+      date-time: iso
+      time: iso
+  application:
+    name: user-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/postgres?useSSL=false}
+    username: postgres
+    password: admin
+    hikari:
+      maximum-pool-size: ${MAXIMUM_POOL_SIZE:5}
+      minimum-idle: ${MINIMUM_IDLE:1}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: user_service
+        jdbc:
+          time_zone: Z
+          lob:
+            non_contextual_creation: true
+    database: POSTGRESQL
+  liquibase:
+    change-log: classpath:config/liquibase/master_changelog.xml
+    contexts: ${LIQUIBASE_CONTEXT:default}
+    enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/spring-app
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+keycloak:
+
+  enabled: true
+  principal-attribute: preferred_username
+  public-client: true
+  realm: spring-app
+  auth-server-url : http://localhost:8080/
+  use-resource-role-mappings: true
+
+
+kafka:
+  bootstrap-servers:
+    localhost:8097,localhost:8098,localhost:8099
+
+schema:
+  registry:
+    url:
+      http://localhost:8081
+
+conf-jwt:
+  principal-attribute: principal_username
+  resource-id: login-app

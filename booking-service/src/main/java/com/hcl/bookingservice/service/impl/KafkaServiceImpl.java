@@ -3,9 +3,9 @@ package com.hcl.bookingservice.service.impl;
 import com.hcl.bookingservice.domain.Booking;
 import com.hcl.bookingservice.dto.FlightDetailsDTO;
 import com.hcl.bookingservice.service.KafkaService;
+import com.hcl.kafka.dto.NotificationDTO;
 import com.hcl.kafka.dto.PaymentDTO;
 import com.hcl.kafka.dto.SeatReservationDTO;
-import org.apache.avro.generic.GenericRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,9 +22,9 @@ public class KafkaServiceImpl implements KafkaService
 
     private final KafkaTemplate<Long, PaymentDTO> paymentKafkaTemplate;
 
-    private final KafkaTemplate<String, String> notificationKafkaTemplate;
+    private final KafkaTemplate<String, NotificationDTO> notificationKafkaTemplate;
 
-    public KafkaServiceImpl(KafkaTemplate<Long, SeatReservationDTO> adminKafkaTemplate, KafkaTemplate<Long, PaymentDTO> paymentKafkaTemplate, KafkaTemplate<String, String> notificationKafkaTemplate)
+    public KafkaServiceImpl(KafkaTemplate<Long, SeatReservationDTO> adminKafkaTemplate, KafkaTemplate<Long, PaymentDTO> paymentKafkaTemplate, KafkaTemplate<String, NotificationDTO> notificationKafkaTemplate)
     {
         this.adminKafkaTemplate = adminKafkaTemplate;
         this.paymentKafkaTemplate = paymentKafkaTemplate;
@@ -39,7 +39,7 @@ public class KafkaServiceImpl implements KafkaService
 
             sendAdminMessage(flightDetails.getId(), booking.getId(), booking.getNumberOfSeats());
 //            sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIban(), flightDetails.getPrice() * booking.getNumberOfSeats());
-            sendNotificationMessage(booking.getId(), flightDetails, booking.getStatus());
+            sendNotificationMessage(booking.getId(), booking.getUserEmail(), flightDetails, booking.getStatus());
 
             return null;
         }).whenComplete((result, exception) ->
@@ -55,22 +55,37 @@ public class KafkaServiceImpl implements KafkaService
     }
 
     @Override
-    public void sendAfterAdminValidationMessages(Long flightId, Booking booking)
+    public void sendRejectedMessages(Booking booking, String message)
     {
         FlightDetailsDTO flightDetails = booking.getFlight();
-        sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIban(), flightDetails.getPrice() * booking.getNumberOfSeats());
+        sendAdminMessage(flightDetails.getId(), booking.getId(), -booking.getNumberOfSeats());
+        sendNotificationMessage(booking.getId(), booking.getUserEmail(), flightDetails, "REJECTED", message);
     }
 
     @Override
-    public void sendAfterPaymentValidationMessages(Booking booking, String status)
+    public void sendAfterAdminValidationMessages(Long flightId, Booking booking)
     {
-        sendNotificationMessage(booking.getId(), booking.getFlight(), booking.getStatus());
+        FlightDetailsDTO flightDetails = booking.getFlight();
+        sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIbanOperator(), flightDetails.getPrice() * booking.getNumberOfSeats());
     }
 
-    private void sendAdminMessage(Long flightId, String bookingId, Integer numberOfSeats)
+    @Override
+    public void sendAfterPaymentValidationMessages(Booking booking, String status, Boolean validated)
+    {
+        if(!validated)
+        {
+            sendRejectedMessages(booking, "Payment failed!");
+        }
+        else
+        {
+            sendNotificationMessage(booking.getId(), booking.getUserEmail(), booking.getFlight(), booking.getStatus());
+        }
+    }
+
+    private void sendAdminMessage(Long flightId, String bookingId, Long numberOfSeats)
     {
         SeatReservationDTO reservationDTO = new SeatReservationDTO();
-        reservationDTO.setId(bookingId);
+        reservationDTO.setBookingId(bookingId);
         reservationDTO.setNumberOfSeats(numberOfSeats);
         adminKafkaTemplate.send("seat_reservation", flightId, reservationDTO)
                 .whenComplete((result, exception) ->
@@ -106,9 +121,14 @@ public class KafkaServiceImpl implements KafkaService
                 });
     }
 
-    private void sendNotificationMessage(String bookingId, FlightDetailsDTO flightDetails, String status)
+    private void sendNotificationMessage(String bookingId, String userEmail, FlightDetailsDTO flightDetails, String status)
     {
-        notificationKafkaTemplate.send("notification", bookingId, buildNotificationMessage(flightDetails.getDeparture(), flightDetails.getArrival(), status))
+        sendNotificationMessage(bookingId, userEmail, flightDetails, status, "");
+    }
+
+    private void sendNotificationMessage(String bookingId, String userEmail, FlightDetailsDTO flightDetails, String status, String otherMentions)
+    {
+        notificationKafkaTemplate.send("notification", bookingId, buildNotificationMessage(userEmail, flightDetails.getDeparture(), flightDetails.getArrival(), status, otherMentions))
                 .whenComplete((result, exception) ->
                 {
                     if (exception == null)
@@ -121,17 +141,20 @@ public class KafkaServiceImpl implements KafkaService
                 });
     }
 
-    private String buildNotificationMessage(String departure, String arrival, String status)
+    private NotificationDTO buildNotificationMessage(String userEmail, String departure, String arrival, String status, String otherMentions)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("Flight from");
-        sb.append(departure);
-        sb.append(" to ");
-        sb.append(arrival);
-        sb.append(". ");
-        sb.append("STATUS: ");
-        sb.append(status);
+        sb
+                .append("Flight from ")
+                .append(departure)
+                .append(" to ")
+                .append(arrival)
+                .append(". ")
+                .append("STATUS: ")
+                .append(status)
+                .append(". ")
+                .append(otherMentions);
 
-        return sb.toString();
+        return new NotificationDTO(userEmail, sb.toString());
     }
 }

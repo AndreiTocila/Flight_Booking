@@ -6,13 +6,13 @@ public class BookingDTO
 {
     private Long flightId;
     private Long cardDetailsId;
-    private Integer numberOfSeats;
+    private Long numberOfSeats;
 
     public BookingDTO()
     {
     }
 
-    public BookingDTO(Long flightId, Long cardDetailsId, Integer numberOfSeats)
+    public BookingDTO(Long flightId, Long cardDetailsId, Long numberOfSeats)
     {
         this.flightId = flightId;
         this.cardDetailsId = cardDetailsId;
@@ -39,12 +39,12 @@ public class BookingDTO
         this.cardDetailsId = cardDetailsId;
     }
 
-    public Integer getNumberOfSeats()
+    public Long getNumberOfSeats()
     {
         return numberOfSeats;
     }
 
-    public void setNumberOfSeats(Integer numberOfSeats)
+    public void setNumberOfSeats(Long numberOfSeats)
     {
         this.numberOfSeats = numberOfSeats;
     }

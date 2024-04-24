@@ -1,24 +1,175 @@
-version: '3'
+version: '3.6'
 services:
 
-#  keycloak:
-#    image: quay.io/keycloak/keycloak:latest
-#    container_name: keycloak
-#    networks:
-#      project:
+  #  flight-book-user-service:
+  #    build:
+  #      context: ./user-service
+  #      dockerfile: Dockerfile
+  #    container_name: "user-service"
+  #    mem_swappiness: 100
+  #    user: "cnb"
+  #    entrypoint: "/cnb/process/web"
+  #    networks:
+  #      flight-book-network:
+  #    healthcheck:
+  #      test: "curl --fail --silent localhost:9001/userservice/actuator/health | grep UP || exit 1"
+  #      interval: 20s
+  #      timeout: 5s
+  #      retries: 10
+  #    depends_on:
+  #      flight-book-database:
+  #        condition: service_started
+  #    environment:
+  #      - BPL_JVM_THREAD_COUNT=10
+  #      - JAVA_TOOL_OPTIONS=-Xmx64m -Xss256k -XX:MaxMetaspaceSize=100M -XX:ReservedCodeCacheSize=24M
+  #      - LIQUIBASE_CONTEXT=local-dev
+  #      - DB_URL=jdbc:postgresql://flight-book-database:5432/postgres?useSSL=false
+  #    expose:
+  #      - "9001"
+
+#  user-service:
+#    build:
+#      context: ./user-service
+#      dockerfile: Dockerfile
+#    container_name: user-service
 #    ports:
-#      - "8080:8080"
+#      - "9001:9001"
+#    networks:
+#      flight-book-network:
+#    depends_on:
+#      - keycloak
+#      - flight-book-database
+#      - schema-registry
+#      - kafka1
+#      - keycloakdb
 #    environment:
-#      KEYCLOAK_ADMIN: admin
-#      KEYCLOAK_ADMIN_PASSWORD: admin
-#    command:
-#      - start-dev
+#      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/spring-app
+#      - keycloak.auth-server-url=http://keycloak:8080/
+#      - spring.datasource.url=jdbc:postgresql://flight-book-database:5432/postgres?useSSL=false
+#      - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+#      - schema.registry.url=http://schema-registry:8081
+#    volumes:
+#      - ./keycloak.json:/keycloak.json
+#
+#  booking-service:
+#    build:
+#      context: ./booking-service
+#      dockerfile: Dockerfile
+#    container_name: booking-service
+#    ports:
+#      - "9090:9090"
+#    networks:
+#      flight-book-network:
+#    depends_on:
+#      - booking-service-db
+#      - schema-registry
+#      - kafka1
+#    environment:
+#      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/spring-app
+#      - spring.data.mongodb.uri=mongodb://booking-service-db:27017/Bookings
+#      - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+#      - schema.registry.url=http://schema-registry:8081
+
+  payment-service:
+    build:
+      context: ./payment-service
+      dockerfile: Dockerfile
+    container_name: payment-service
+    ports:
+      - "9091:8080"
+    networks:
+      flight-book-network:
+    depends_on:
+      - payment-service-db
+      - schema-registry
+      - kafka1
+    environment:
+      - spring.data.mongodb.uri=mongodb://payment-service-db:27017/paypal
+      - spring.kafka.consumer.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+      - spring.kafka.producer.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+      - spring.kafka.consumer.properties.schema.registry.url=http://schema-registry:8081
+      - spring.kafka.producer.properties.schema.registry.url=http://schema-registry:8081
+
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - "9095:9095"
+    networks:
+      flight-book-network:
+    depends_on:
+      - zookeeper
+      - notification-db
+      - schema-registry
+      - kafka1
+    environment:
+      - spring.data.mongodb.uri=mongodb://notification-db:27017/notificationService
+      - spring.kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
+      - spring.kafka.properties.schema.registry.url=http://schema-registry:8081
+
+
+  flight-book-database:
+    image: "postgres:16"
+    container_name: "flight-book-database"
+    restart: always
+    networks:
+      flight-book-network:
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    volumes:
+      - flight_book:/var/lib/postgresql/data
+    expose:
+      - "5432"
+
+  booking-service-db:
+    container_name: booking-service-db
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: Bookings
+    volumes:
+      - booking-service-db-data:/data/db
+    networks:
+      - flight-book-network
+    restart: unless-stopped
+
+  payment-service-db:
+    container_name: payment-service-db
+    image: mongo:latest
+    ports:
+      - '27018:27017'
+    environment:
+      MONGO_INITDB_DATABASE: paypal
+    volumes:
+      - payment-service-db-data:/data/db
+    networks:
+      - flight-book-network
+    restart: unless-stopped
+
+  notification-db:
+    image: mongo:latest
+    container_name: notification-db
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_DATABASE: notificationService
+    volumes:
+      - notification-db-data:/data/db
+    networks:
+      - flight-book-network
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
     networks:
-      project:
+      flight-book-network:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
     restart: unless-stopped
@@ -27,7 +178,7 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka1
     networks:
-      project:
+      flight-book-network:
     ports:
       - "8097:8097"
     depends_on:
@@ -44,7 +195,7 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka2
     networks:
-      project:
+      flight-book-network:
     ports:
       - "8098:8098"
     depends_on:
@@ -61,7 +212,7 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka3
     networks:
-      project:
+      flight-book-network:
     ports:
       - "8099:8099"
     depends_on:
@@ -76,9 +227,10 @@ services:
 
   schema-registry:
     image: confluentinc/cp-schema-registry:latest
+    container_name: schema-registry
     hostname: schema-registry
     networks:
-      project:
+      flight-book-network:
     ports:
       - "8081:8081"
     depends_on:
@@ -97,7 +249,7 @@ services:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
     networks:
-      project:
+      flight-book-network:
     depends_on:
       - kafka1
     ports:
@@ -108,51 +260,91 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
     restart: unless-stopped
 
-#  postgres-db:
-#    image: postgres
-#    container_name: postgres-db
-#    networks:
-#      project:
-#    ports:
-#      - "5431:5432"
-#    volumes:
-#      - postgres-db-data:/var/lib/postgresql/data
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#      - POSTGRES_DB=postgres
-
-  booking-service:
-    build:
-      context: ./booking-service
-      dockerfile: Dockerfile
-    container_name: booking-service
-    ports:
-      - "9090:9090"
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak2
     networks:
-      project:
+      flight-book-network:
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloakdb:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+
+      KC_LOG_LEVEL: info
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
     depends_on:
-      - booking-service-db
-    environment:
-      - spring.data.mongodb.uri=mongodb://booking-service-db:27017/Bookings
-      - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
-      - schema.registry.url=http://schema-registry:8081
+      - keycloakdb
 
-  booking-service-db:
-    container_name: booking-service-db
-    image: mongo:latest
-    ports:
-      - '27017:27017'
-    environment:
-      MONGO_INITDB_DATABASE: Bookings
-    volumes:
-      - booking-service-db-data:/data/db
+
+  keycloakdb:
+    image: postgres:16
+    restart: always
     networks:
-      - project
-    restart: unless-stopped
+      flight-book-network:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
 
-networks:
-  project:
+  #  prometheus:
+  #    image: prom/prometheus
+  #    container_name: prometheus
+  #    volumes:
+  #      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  #      - prometheus_data:/prometheus
+  #    ports:
+  #      - "9090:9090"
+  #    depends_on:
+  #      - notification-service
+  #    #      - flight-search
+  #    #      - operator-lufthansa
+  #    #      - operator-wizzair
+  #    #      - operator-ryanair
+  #    networks:
+  #      - flight-book-network
+  #
+  #  grafana:
+  #    image: grafana/grafana
+  #    container_name: grafana
+  #    ports:
+  #      - "3000:3000"
+  #    depends_on:
+  #      - prometheus
+  #    volumes:
+  #      - grafana_data:/var/lib/grafana
+  #    environment:
+  #      GF_SECURITY_ADMIN_PASSWORD: 'admin'
+  #    networks:
+  #      - flight-book-network
 
 volumes:
+  flight_book:
   booking-service-db-data:
+  payment-service-db-data:
+  notification-db-data:
+  postgres_data:
+#  grafana_data:
+#    driver: local
+#  prometheus_data:
+#    driver: local
+
+networks:
+  flight-book-network:
+    driver: bridge

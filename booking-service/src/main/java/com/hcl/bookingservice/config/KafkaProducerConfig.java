@@ -1,6 +1,7 @@
 package com.hcl.bookingservice.config;
 
 import com.hcl.kafka.dto.AdminFeedback;
+import com.hcl.kafka.dto.NotificationDTO;
 import com.hcl.kafka.dto.PaymentDTO;
 import com.hcl.kafka.dto.SeatReservationDTO;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
@@ -57,21 +58,15 @@ public class KafkaProducerConfig
     }
 
     @Bean
-    public ProducerFactory<Long, PaymentDTO> paymenetProducerFactory()
-    {
-        return new DefaultKafkaProducerFactory<>(getAvroProducerProperties(LongSerializer.class));
-    }
-
-    @Bean
-    public ProducerFactory<String, String> notificationProducerFactory()
-    {
-        return new DefaultKafkaProducerFactory<>(getProducerProperties(StringSerializer.class, StringSerializer.class));
-    }
-
-    @Bean
     public KafkaTemplate<Long, SeatReservationDTO> adminKafkaTemplate()
     {
         return new KafkaTemplate<>(adminProducerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<Long, PaymentDTO> paymenetProducerFactory()
+    {
+        return new DefaultKafkaProducerFactory<>(getAvroProducerProperties(LongSerializer.class));
     }
 
     @Bean
@@ -81,21 +76,26 @@ public class KafkaProducerConfig
     }
 
     @Bean
-    public KafkaTemplate<String, String> notificationKafkaTemplate()
+    public ProducerFactory<String, NotificationDTO> notificationProducerFactory()
+    {
+        return new DefaultKafkaProducerFactory<>(getAvroProducerProperties(StringSerializer.class));
+    }
+
+    @Bean
+    public KafkaTemplate<String, NotificationDTO> notificationKafkaTemplate()
     {
         return new KafkaTemplate<>(notificationProducerFactory());
     }
 
-
-
     @Bean
-    public ProducerFactory<Long, AdminFeedback> adminFeedbackProducerFactory()
+    public ProducerFactory<String, String> dtoProducerFactory()
     {
-        return new DefaultKafkaProducerFactory<>(getAvroProducerProperties(LongSerializer.class));
+        return new DefaultKafkaProducerFactory<>(getProducerProperties(StringSerializer.class,StringSerializer.class));
     }
+
     @Bean
-    public KafkaTemplate<Long, AdminFeedback> adminFeedbackKafkaTemplate()
+    public KafkaTemplate<String, String> dtoKafkaTemplate()
     {
-        return new KafkaTemplate<>(adminFeedbackProducerFactory());
+        return new KafkaTemplate<>(dtoProducerFactory());
     }
 }

@@ -20,6 +20,9 @@
     <modules>
         <module>user-service</module>
         <module>booking-service</module>
+        <module>payment-service</module>
+<!--        <module>flight-search-service</module>-->
+        <module>notification-service</module>
     </modules>
 
     <properties>
