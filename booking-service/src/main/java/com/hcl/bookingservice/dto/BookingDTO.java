@@ -5,17 +5,15 @@ import java.util.Objects;
 public class BookingDTO
 {
     private Long flightId;
-    private Long cardDetailsId;
     private Long numberOfSeats;
 
     public BookingDTO()
     {
     }
 
-    public BookingDTO(Long flightId, Long cardDetailsId, Long numberOfSeats)
+    public BookingDTO(Long flightId, Long numberOfSeats)
     {
         this.flightId = flightId;
-        this.cardDetailsId = cardDetailsId;
         this.numberOfSeats = numberOfSeats;
     }
 
@@ -27,16 +25,6 @@ public class BookingDTO
     public void setFlightId(Long flightId)
     {
         this.flightId = flightId;
-    }
-
-    public Long getCardDetailsId()
-    {
-        return cardDetailsId;
-    }
-
-    public void setCardDetailsId(Long cardDetailsId)
-    {
-        this.cardDetailsId = cardDetailsId;
     }
 
     public Long getNumberOfSeats()
@@ -61,13 +49,13 @@ public class BookingDTO
             return false;
         }
         BookingDTO that = (BookingDTO) o;
-        return Objects.equals(flightId, that.flightId) && Objects.equals(cardDetailsId, that.cardDetailsId) && Objects.equals(numberOfSeats, that.numberOfSeats);
+        return Objects.equals(flightId, that.flightId) && Objects.equals(numberOfSeats, that.numberOfSeats);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(flightId, cardDetailsId, numberOfSeats);
+        return Objects.hash(flightId, numberOfSeats);
     }
 
     @Override
@@ -75,7 +63,6 @@ public class BookingDTO
     {
         return "BookingDTO{" +
                 "flightId=" + flightId +
-                ", cardDetailsId=" + cardDetailsId +
                 ", numberOfSeats=" + numberOfSeats +
                 '}';
     }

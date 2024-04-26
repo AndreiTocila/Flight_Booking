@@ -3,7 +3,6 @@ package com.hcl.bookingservice.controller;
 import com.hcl.bookingservice.domain.Booking;
 import com.hcl.bookingservice.dto.BookingDTO;
 import com.hcl.bookingservice.service.BookingService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

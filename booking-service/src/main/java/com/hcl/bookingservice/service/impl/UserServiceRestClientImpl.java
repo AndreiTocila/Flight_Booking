@@ -35,7 +35,7 @@ public class UserServiceRestClientImpl implements UserServiceRestClient
     }
 
     @Override
-    public Mono<String> getCardDetails(Long cardId, Jwt jwt)
+    public Mono<String> getCardDetails(Jwt jwt)
     {
         String url = "/user";
 

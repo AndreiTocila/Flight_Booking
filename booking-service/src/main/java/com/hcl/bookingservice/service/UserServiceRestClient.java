@@ -9,5 +9,5 @@ public interface UserServiceRestClient
 {
     Mono<FlightDetailsDTO> getFlightDetails(Long flightId, String token);
 
-    Mono<String> getCardDetails(Long cardId, Jwt jwt);
+    Mono<String> getCardDetails(Jwt jwt);
 }

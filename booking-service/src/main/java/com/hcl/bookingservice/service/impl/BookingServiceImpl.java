@@ -44,7 +44,7 @@ public class BookingServiceImpl implements BookingService
         booking.setExpirationDate(LocalDateTime.now().plusMinutes(15L));
 
         Mono<FlightDetailsDTO> flightDetailsDTOMono = userServiceRestClient.getFlightDetails(bookingDTO.getFlightId(), jwt.getTokenValue());
-        Mono<String> ibanMono = userServiceRestClient.getCardDetails(bookingDTO.getCardDetailsId(), jwt);
+        Mono<String> ibanMono = userServiceRestClient.getCardDetails(jwt);
 
         return Mono.zip(flightDetailsDTOMono, ibanMono)
                 .flatMap(tuple ->
