@@ -45,18 +45,22 @@ spring:
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 keycloak:
-
-  enabled: true
-  principal-attribute: preferred_username
-  public-client: true
   realm: spring-app
-  auth-server-url : http://localhost:8080/
+  auth-server-url : http://keycloak:8080/
   use-resource-role-mappings: true
-
+  ssl-required: external
+  resource: login-app
+  credentials:
+      secret: "ZlnxzwMYaSOv5ygztmVPtcqBlBxyLBv2"
 
 kafka:
   bootstrap-servers:
     localhost:8097,localhost:8098,localhost:8099
+
+logging:
+  level:
+    org:
+      keycloak: DEBUG
 
 schema:
   registry:

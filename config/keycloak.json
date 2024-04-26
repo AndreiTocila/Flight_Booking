@@ -1,6 +1,6 @@
 {
   "realm": "spring-app",
-  "auth-server-url": "keycloak:8080/",
+  "auth-server-url": "http://keycloak:8080/",
   "ssl-required": "external",
   "resource": "login-app",
   "verify-token-audience": true,

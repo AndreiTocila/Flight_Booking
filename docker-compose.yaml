@@ -44,6 +44,8 @@ services:
   #    expose:
   #      - "9001"
 
+
+
   user-service:
     build:
       context: ./user-service
@@ -65,8 +67,9 @@ services:
       - spring.datasource.url=jdbc:postgresql://flight-book-database:5432/postgres?useSSL=false
       - kafka.bootstrap-servers=kafka1:9092,kafka2:9092,kafka3:9092
       - schema.registry.url=http://schema-registry:8081
-    volumes:
-      - ./keycloak.json:/keycloak.json
+
+
+
 
 
 
@@ -163,7 +166,8 @@ services:
       - start-dev
     depends_on:
       - keycloakdb
-
+    volumes:
+      - ./config:/config
 
   keycloakdb:
     image: postgres:16

@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="user-service" />
         <module name="booking-service" />
+        <module name="payment-service" />
       </profile>
     </annotationProcessing>
   </component>
