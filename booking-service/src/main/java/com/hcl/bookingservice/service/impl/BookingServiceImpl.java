@@ -40,7 +40,7 @@ public class BookingServiceImpl implements BookingService
         booking.setId(null);
         booking.setNumberOfSeats(bookingDTO.getNumberOfSeats());
         booking.setStatus("RESERVED");
-        booking.setEmail(jwt.getClaimAsString("email"));
+        booking.setUserEmail(jwt.getClaimAsString("email"));
         booking.setExpirationDate(LocalDateTime.now().plusMinutes(15L));
 
         Mono<FlightDetailsDTO> flightDetailsDTOMono = userServiceRestClient.getFlightDetails(bookingDTO.getFlightId(), jwt.getTokenValue());

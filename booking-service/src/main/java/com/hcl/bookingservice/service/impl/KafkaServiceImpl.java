@@ -3,6 +3,7 @@ package com.hcl.bookingservice.service.impl;
 import com.hcl.bookingservice.domain.Booking;
 import com.hcl.bookingservice.dto.FlightDetailsDTO;
 import com.hcl.bookingservice.service.KafkaService;
+import com.hcl.kafka.dto.NotificationDTO;
 import com.hcl.kafka.dto.PaymentDTO;
 import com.hcl.kafka.dto.SeatReservationDTO;
 import org.slf4j.Logger;
@@ -21,9 +22,9 @@ public class KafkaServiceImpl implements KafkaService
 
     private final KafkaTemplate<Long, PaymentDTO> paymentKafkaTemplate;
 
-    private final KafkaTemplate<String, String> notificationKafkaTemplate;
+    private final KafkaTemplate<String, NotificationDTO> notificationKafkaTemplate;
 
-    public KafkaServiceImpl(KafkaTemplate<Long, SeatReservationDTO> adminKafkaTemplate, KafkaTemplate<Long, PaymentDTO> paymentKafkaTemplate, KafkaTemplate<String, String> notificationKafkaTemplate)
+    public KafkaServiceImpl(KafkaTemplate<Long, SeatReservationDTO> adminKafkaTemplate, KafkaTemplate<Long, PaymentDTO> paymentKafkaTemplate, KafkaTemplate<String, NotificationDTO> notificationKafkaTemplate)
     {
         this.adminKafkaTemplate = adminKafkaTemplate;
         this.paymentKafkaTemplate = paymentKafkaTemplate;
@@ -38,7 +39,7 @@ public class KafkaServiceImpl implements KafkaService
 
             sendAdminMessage(flightDetails.getId(), booking.getId(), booking.getNumberOfSeats());
 //            sendPaymentMessage(flightDetails.getId(), booking.getId(), booking.getCardDetails().getIban(), flightDetails.getIban(), flightDetails.getPrice() * booking.getNumberOfSeats());
-            sendNotificationMessage(booking.getId(), flightDetails, booking.getStatus());
+            sendNotificationMessage(booking.getId(), booking.getUserEmail(), flightDetails, booking.getStatus());
 
             return null;
         }).whenComplete((result, exception) ->
@@ -58,7 +59,7 @@ public class KafkaServiceImpl implements KafkaService
     {
         FlightDetailsDTO flightDetails = booking.getFlight();
         sendAdminMessage(flightDetails.getId(), booking.getId(), -booking.getNumberOfSeats());
-        sendNotificationMessage(booking.getId(), flightDetails, "REJECTED", message);
+        sendNotificationMessage(booking.getId(), booking.getUserEmail(), flightDetails, "REJECTED", message);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class KafkaServiceImpl implements KafkaService
         }
         else
         {
-            sendNotificationMessage(booking.getId(), booking.getFlight(), booking.getStatus());
+            sendNotificationMessage(booking.getId(), booking.getUserEmail(), booking.getFlight(), booking.getStatus());
         }
     }
 
@@ -120,14 +121,14 @@ public class KafkaServiceImpl implements KafkaService
                 });
     }
 
-    private void sendNotificationMessage(String bookingId, FlightDetailsDTO flightDetails, String status)
+    private void sendNotificationMessage(String bookingId, String userEmail, FlightDetailsDTO flightDetails, String status)
     {
-        sendNotificationMessage(bookingId, flightDetails, status, "");
+        sendNotificationMessage(bookingId, userEmail, flightDetails, status, "");
     }
 
-    private void sendNotificationMessage(String bookingId, FlightDetailsDTO flightDetails, String status, String otherMentions)
+    private void sendNotificationMessage(String bookingId, String userEmail, FlightDetailsDTO flightDetails, String status, String otherMentions)
     {
-        notificationKafkaTemplate.send("notification", bookingId, buildNotificationMessage(flightDetails.getDeparture(), flightDetails.getArrival(), status, otherMentions))
+        notificationKafkaTemplate.send("notification", bookingId, buildNotificationMessage(userEmail, flightDetails.getDeparture(), flightDetails.getArrival(), status, otherMentions))
                 .whenComplete((result, exception) ->
                 {
                     if (exception == null)
@@ -140,7 +141,7 @@ public class KafkaServiceImpl implements KafkaService
                 });
     }
 
-    private String buildNotificationMessage(String departure, String arrival, String status, String otherMentions)
+    private NotificationDTO buildNotificationMessage(String userEmail, String departure, String arrival, String status, String otherMentions)
     {
         StringBuilder sb = new StringBuilder();
         sb
@@ -154,6 +155,6 @@ public class KafkaServiceImpl implements KafkaService
                 .append(". ")
                 .append(otherMentions);
 
-        return sb.toString();
+        return new NotificationDTO(userEmail, sb.toString());
     }
 }
