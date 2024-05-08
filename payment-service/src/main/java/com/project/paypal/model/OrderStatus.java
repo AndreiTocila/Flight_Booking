@@ -9,6 +9,8 @@ public class OrderStatus {
     private String id;
     private String orderId;
     private String status;
+    private Long creationTime;
+    private Long expirationTime;
 
     public String getId() {
         return id;
@@ -34,10 +36,28 @@ public class OrderStatus {
         this.status = status;
     }
 
-    public OrderStatus(String id, String orderId, String status) {
+    public Long getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Long creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public Long getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(Long expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    public OrderStatus(String id, String orderId, String status, Long creationTime, Long expirationTime) {
         this.id = id;
         this.orderId = orderId;
         this.status = status;
+        this.creationTime = creationTime;
+        this.expirationTime = expirationTime;
     }
 
     public OrderStatus() {

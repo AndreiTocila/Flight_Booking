@@ -1,5 +1,5 @@
 {
-  "namespace": "com.project.paypal.utils",
+  "namespace": "com.hcl.kafka.dto",
   "type": "record",
   "name": "PaymentMessage",
   "fields": [

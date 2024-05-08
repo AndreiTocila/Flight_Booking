@@ -1,5 +1,7 @@
 package com.project.paypal.model;
 
+import com.paypal.orders.Payee;
+import com.paypal.orders.Payer;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,26 +10,35 @@ public class OrderPersonas {
 
     @Id
     private String id;
-    private String orderId;
     private String payerId;
     private String payerEmail;
     private String payeeId;
     private String payeeEmail;
+    private Payee payee;
+    private Payer payer;
 
-    public String getId() {
-        return id;
+    public Payee getPayee() {
+        return payee;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPayee(Payee payee) {
+        this.payee = payee;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public Payer getPayer() {
+        return payer;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setPayer(Payer payer) {
+        this.payer = payer;
+    }
+
+    public OrderPersonas(Payee payee, Payer payer) {
+        this.payee = payee;
+        this.payer = payer;
+    }
+
+    public OrderPersonas() {
     }
 
     public String getPayerId() {
@@ -60,17 +71,5 @@ public class OrderPersonas {
 
     public void setPayeeEmail(String payeeEmail) {
         this.payeeEmail = payeeEmail;
-    }
-
-    public OrderPersonas(String id, String orderId, String payerId, String payerEmail, String payeeId, String payeeEmail) {
-        this.id = id;
-        this.orderId = orderId;
-        this.payerId = payerId;
-        this.payerEmail = payerEmail;
-        this.payeeId = payeeId;
-        this.payeeEmail = payeeEmail;
-    }
-
-    public OrderPersonas() {
     }
 }

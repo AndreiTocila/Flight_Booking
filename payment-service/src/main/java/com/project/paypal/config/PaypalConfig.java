@@ -12,25 +12,25 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = "{com.project.paypal.repository.OrderRepository}")
 public class PaypalConfig {
 
-    @Value("${paypal.client-id}")
-    private String clientId;
-    @Value("${paypal.client-secret}")
-    private String clientSecret;
-    @Value("${paypal.mode}")
-    private String mode;
-
-    @Bean
-    public APIContext apiContext(){
-        return new APIContext(clientId, clientSecret, mode);
-    }
-
-    @Bean
-    public PayPalEnvironment payPalEnvironment(){
-        return new PayPalEnvironment.Sandbox(clientId, clientSecret);
-    }
-
-    @Bean
-    public PayPalHttpClient payPalHttpClient(PayPalEnvironment environment){
-        return new PayPalHttpClient(environment);
-    }
+//    @Value("${paypal.client-id}")
+//    private String clientId;
+//    @Value("${paypal.client-secret}")
+//    private String clientSecret;
+//    @Value("${paypal.mode}")
+//    private String mode;
+//
+//    @Bean
+//    public APIContext apiContext(){
+//        return new APIContext(clientId, clientSecret, mode);
+//    }
+//
+//    @Bean
+//    public PayPalEnvironment payPalEnvironment(){
+//        return new PayPalEnvironment.Sandbox(clientId, clientSecret);
+//    }
+//
+//    @Bean
+//    public PayPalHttpClient payPalHttpClient(PayPalEnvironment environment){
+//        return new PayPalHttpClient(environment);
+//    }
 }

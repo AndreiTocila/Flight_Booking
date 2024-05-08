@@ -18,12 +18,12 @@
     <form method="post" action="/payment/create" class="mt-5 card p-3">
         <div class="mb-3">
             <label for="method" class="form-label">Payment method</label>
-            <input id="method" type="text" class="form-control"
+            <input orderId="method" type="text" class="form-control"
                    name="method" value="Paypal" readonly>
         </div>
         <div class="mb-3">
             <label for="intent" class="form-label">Intent</label>
-            <select class="form-control" id="intent" name="intent">
+            <select class="form-control" orderId="intent" name="intent">
                 <option value="SALE">SALE</option>
                 <option value="AUTHORIZE">AUTHORIZE</option>
                 <option value="ORDER">ORDER</option>
@@ -32,12 +32,12 @@
         </div>
         <div class="mb-3">
             <label for="amount" class="form-label">Amount</label>
-            <input id="amount" type="number" class="form-control"
+            <input orderId="amount" type="number" class="form-control"
                    name="amount" value="10.0">
         </div>
         <div class="mb-3">
             <label for="currency" class="form-label">Amount</label>
-            <select class="form-control" id="currency" name="currency">
+            <select class="form-control" orderId="currency" name="currency">
                 <option value="USD" selected>USD</option>
                 <option value="EUR">EUR</option>
                 <option value="GBP">GBP</option>
@@ -45,7 +45,7 @@
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <input id="description" type="text" class="form-control"
+            <input orderId="description" type="text" class="form-control"
                    name="description">
         </div>
         <div class="d-flex justify-content-center">

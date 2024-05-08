@@ -1,8 +1,6 @@
 package com.project.paypal.controller;
 
-import com.project.paypal.model.OrderComplete;
-import com.project.paypal.model.OrderPayment;
-import com.project.paypal.model.OrderPersonas;
+import com.project.paypal.model.*;
 import com.project.paypal.service.PaypalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +17,26 @@ public class PaymentController {
         this.payPalService = payPalService;
     }
 
-    @PostMapping("/init")
-    public OrderPayment createPayment(@RequestParam(name = "sum") Double sum) {
-        return payPalService.createPayment(sum);
+    @PostMapping(value="/refund")
+    public Mono<OrderRefund> completeRefund(@RequestParam("token") String token, @RequestParam(name = "iban") String iban){
+        return payPalService.completeRefund(token, iban);
     }
 
-    @PostMapping(value = "/capture")
-    public OrderComplete completePayment(@RequestParam("token") String token) {
-        return payPalService.completePayment(token);
+    @PostMapping(value = "/completeAuth")
+    public Mono<OrderAuthorize> completeAuthPayment(@RequestParam("token") String token,
+                                                    @RequestParam(name = "iban") String iban) {
+        return payPalService.completeAuthPayment(token, iban);
+    }
+
+    @PostMapping(value = "/captureAuth")
+    public Mono<OrderAuthorize> captureAuthPayment(@RequestParam("token") String token,
+                                                   @RequestParam(name = "iban") String iban){
+        return payPalService.captureAuthOrder(token, iban);
     }
 
     @GetMapping(value = "/get")
-    public Mono<OrderPersonas> getPayment(@RequestParam("token") String token) {
-        return payPalService.getOrder(token);
+    public Mono<OrderPersonas> getPayment(@RequestParam("token") String token,
+                                          @RequestParam(name = "iban") String iban) {
+        return payPalService.getOrder(token, iban);
     }
 }

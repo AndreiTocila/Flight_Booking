@@ -15,29 +15,24 @@ spring:
   data:
     mongodb:
       host: localhost
-      port: 27018
+      port: 27017
       database: paypal
-  kafka:
-    consumer:
-      bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
-      group-id: bogGroup
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
-      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-      properties:
-        schema:
-          registry:
-            url: "http://localhost:8081"
-        specific:
-          avro:
-            reader: "true"
 
-    producer:
-      bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
-      key-serializer: org.apache.kafka.common.serialization.LongSerializer
-      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-      properties:
-        schema:
-          registry:
-            url: "http://localhost:8081"
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: barbubogdan1337@gmail.com
+    password: cnla mail nmmu knvr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+kafka:
+  bootstrap-servers: localhost:8097,localhost:8098,localhost:8099
+schema:
+  registry:
+    url: http://localhost:8081/
 

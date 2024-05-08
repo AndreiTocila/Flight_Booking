@@ -1,5 +1,5 @@
 {
-  "namespace": "com.project",
+  "namespace": "com.hcl.kafka.dto",
   "type": "record",
   "name": "PaymentValidation",
   "fields": [

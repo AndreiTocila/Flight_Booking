@@ -41,7 +41,7 @@
     </build>
     <repositories>
         <repository>
-            <id>spring-milestones</id>
+            <orderId>spring-milestones</orderId>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
             <snapshots>
@@ -51,7 +51,7 @@
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>spring-milestones</id>
+            <orderId>spring-milestones</orderId>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
             <snapshots>
